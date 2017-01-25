@@ -150,7 +150,7 @@
     <value>5, 141</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 13</value>
+    <value>71, 12</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -174,7 +174,7 @@
     <value>142, 139</value>
   </data>
   <data name="NUM_angle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 20</value>
+    <value>51, 21</value>
   </data>
   <data name="NUM_angle.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -198,7 +198,7 @@
     <value>5, 117</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 13</value>
+    <value>53, 12</value>
   </data>
   <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -222,7 +222,7 @@
     <value>142, 115</value>
   </data>
   <data name="NUM_altitude.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 20</value>
+    <value>51, 21</value>
   </data>
   <data name="NUM_altitude.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -246,7 +246,7 @@
     <value>188, 54</value>
   </data>
   <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 13</value>
+    <value>29, 12</value>
   </data>
   <data name="label7.TabIndex" type="System.Int32, mscorlib">
     <value>67</value>
@@ -273,7 +273,7 @@
     <value>9, 55</value>
   </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 13</value>
+    <value>65, 12</value>
   </data>
   <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>66</value>
@@ -325,7 +325,7 @@
     <value>8, 97</value>
   </data>
   <data name="chk_includeland.Size" type="System.Drawing.Size, System.Drawing">
-    <value>113, 17</value>
+    <value>126, 16</value>
   </data>
   <data name="chk_includeland.TabIndex" type="System.Int32, mscorlib">
     <value>64</value>
@@ -355,7 +355,7 @@
     <value>5, 166</value>
   </data>
   <data name="label24.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 13</value>
+    <value>71, 12</value>
   </data>
   <data name="label24.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -379,7 +379,7 @@
     <value>142, 164</value>
   </data>
   <data name="numericUpDownFlySpeed.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 20</value>
+    <value>51, 21</value>
   </data>
   <data name="numericUpDownFlySpeed.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -406,7 +406,7 @@
     <value>8, 74</value>
   </data>
   <data name="CHK_includetakeoff.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 17</value>
+    <value>144, 16</value>
   </data>
   <data name="CHK_includetakeoff.TabIndex" type="System.Int32, mscorlib">
     <value>63</value>
@@ -454,7 +454,7 @@
     <value>8, 19</value>
   </data>
   <data name="CMB_camera.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 21</value>
+    <value>216, 20</value>
   </data>
   <data name="CMB_camera.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -481,7 +481,7 @@
     <value>85, 43</value>
   </data>
   <data name="chk_footprints.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 17</value>
+    <value>84, 16</value>
   </data>
   <data name="chk_footprints.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -508,7 +508,7 @@
     <value>85, 20</value>
   </data>
   <data name="chk_internals.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 17</value>
+    <value>78, 16</value>
   </data>
   <data name="chk_internals.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -535,7 +535,7 @@
     <value>8, 66</value>
   </data>
   <data name="chk_grid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 17</value>
+    <value>48, 16</value>
   </data>
   <data name="chk_grid.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -562,7 +562,7 @@
     <value>8, 43</value>
   </data>
   <data name="chk_markers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 17</value>
+    <value>66, 16</value>
   </data>
   <data name="chk_markers.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -589,7 +589,7 @@
     <value>8, 20</value>
   </data>
   <data name="chk_boundary.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 17</value>
+    <value>72, 16</value>
   </data>
   <data name="chk_boundary.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -637,10 +637,10 @@
     <value>Fill</value>
   </data>
   <data name="map.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 20</value>
+    <value>248, 20</value>
   </data>
   <data name="map.Size" type="System.Drawing.Size, System.Drawing">
-    <value>518, 429</value>
+    <value>510, 429</value>
   </data>
   <data name="map.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -667,7 +667,7 @@
     <value>355, 46</value>
   </data>
   <data name="label32.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="label32.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -697,7 +697,7 @@
     <value>214, 46</value>
   </data>
   <data name="label35.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 13</value>
+    <value>113, 12</value>
   </data>
   <data name="label35.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -727,7 +727,7 @@
     <value>355, 33</value>
   </data>
   <data name="label28.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="label28.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -757,7 +757,7 @@
     <value>214, 33</value>
   </data>
   <data name="label31.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 13</value>
+    <value>113, 12</value>
   </data>
   <data name="label31.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -784,7 +784,7 @@
     <value>355, 20</value>
   </data>
   <data name="lbl_distbetweenlines.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="lbl_distbetweenlines.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -811,7 +811,7 @@
     <value>214, 20</value>
   </data>
   <data name="label25.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 13</value>
+    <value>119, 12</value>
   </data>
   <data name="label25.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -838,7 +838,7 @@
     <value>154, 59</value>
   </data>
   <data name="lbl_footprint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="lbl_footprint.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -865,7 +865,7 @@
     <value>13, 59</value>
   </data>
   <data name="label30.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 13</value>
+    <value>65, 12</value>
   </data>
   <data name="label30.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -892,7 +892,7 @@
     <value>154, 46</value>
   </data>
   <data name="lbl_strips.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="lbl_strips.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -919,7 +919,7 @@
     <value>13, 46</value>
   </data>
   <data name="label33.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 13</value>
+    <value>83, 12</value>
   </data>
   <data name="label33.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -946,7 +946,7 @@
     <value>154, 33</value>
   </data>
   <data name="lbl_spacing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="lbl_spacing.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -973,7 +973,7 @@
     <value>13, 33</value>
   </data>
   <data name="label27.Size" type="System.Drawing.Size, System.Drawing">
-    <value>135, 13</value>
+    <value>155, 12</value>
   </data>
   <data name="label27.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1000,7 +1000,7 @@
     <value>154, 20</value>
   </data>
   <data name="lbl_distance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>22, 13</value>
+    <value>23, 12</value>
   </data>
   <data name="lbl_distance.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1027,7 +1027,7 @@
     <value>13, 20</value>
   </data>
   <data name="label23.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 13</value>
+    <value>65, 12</value>
   </data>
   <data name="label23.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1204,7 +1204,7 @@
     <value>8, 69</value>
   </data>
   <data name="RAD_camdirectionport.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 17</value>
+    <value>71, 16</value>
   </data>
   <data name="RAD_camdirectionport.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -1231,7 +1231,7 @@
     <value>8, 46</value>
   </data>
   <data name="RAD_camdirectionland.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 17</value>
+    <value>77, 16</value>
   </data>
   <data name="RAD_camdirectionland.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -1279,7 +1279,7 @@
     <value>143, 99</value>
   </data>
   <data name="NUM_maxflttime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 20</value>
+    <value>51, 21</value>
   </data>
   <data name="NUM_maxflttime.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1306,7 +1306,7 @@
     <value>6, 101</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 13</value>
+    <value>131, 12</value>
   </data>
   <data name="label5.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -1330,7 +1330,7 @@
     <value>143, 73</value>
   </data>
   <data name="NUM_maxspd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 20</value>
+    <value>51, 21</value>
   </data>
   <data name="NUM_maxspd.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1357,7 +1357,7 @@
     <value>6, 75</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 13</value>
+    <value>95, 12</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1381,7 +1381,7 @@
     <value>143, 47</value>
   </data>
   <data name="NUM_minspd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 20</value>
+    <value>51, 21</value>
   </data>
   <data name="NUM_minspd.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1408,7 +1408,7 @@
     <value>6, 49</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 13</value>
+    <value>95, 12</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1432,7 +1432,7 @@
     <value>8, 20</value>
   </data>
   <data name="CMB_aircraft.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 21</value>
+    <value>217, 20</value>
   </data>
   <data name="CMB_aircraft.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1507,7 +1507,7 @@
     <value>Microsoft Sans Serif, 12pt</value>
   </data>
   <data name="LBL_topdock.Location" type="System.Drawing.Point, System.Drawing">
-    <value>240, 0</value>
+    <value>248, 0</value>
   </data>
   <data name="LBL_topdock.Size" type="System.Drawing.Size, System.Drawing">
     <value>431, 20</value>
@@ -1551,7 +1551,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonpan.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 35</value>
+    <value>69, 37</value>
   </data>
   <data name="toolStripButtonpan.Text" xml:space="preserve">
     <value>Pan</value>
@@ -1571,7 +1571,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 35</value>
+    <value>69, 37</value>
   </data>
   <data name="toolStripButtonbox.Text" xml:space="preserve">
     <value>Box</value>
@@ -1594,7 +1594,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonmovebox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 35</value>
+    <value>69, 37</value>
   </data>
   <data name="toolStripButtonmovebox.Text" xml:space="preserve">
     <value>Move Box</value>
@@ -1617,7 +1617,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtoneditbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 35</value>
+    <value>69, 37</value>
   </data>
   <data name="toolStripButtoneditbox.Text" xml:space="preserve">
     <value>Edit Box</value>
@@ -1629,7 +1629,7 @@
     <value>176, 0</value>
   </data>
   <data name="toolStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 449</value>
+    <value>72, 449</value>
   </data>
   <data name="toolStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
