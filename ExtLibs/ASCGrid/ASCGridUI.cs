@@ -24,11 +24,15 @@ namespace MissionPlanner
             this.plugin = plugin;
 
             InitializeComponent();
+
+            myGMAP1.MapProvider = plugin.Host.FDMapType;
+            myGMAP1.SetPositionByKeywords("Shanghai, China");
         }
 
         private void ASCGridUI_Load(object sender, EventArgs e)
         {
 
         }
+
     }
 }

@@ -66,20 +66,23 @@ namespace MissionPlanner
 
         void but_Click(object sender, EventArgs e)
         {
-            using (var ascgridui = new ASCGridUI(this))
+            using (Form ascgridui = new ASCGridUI(this))
             {
                 MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);
-
-                if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
-                {
-                    ascgridui.ShowDialog();
-                }
-                else
-                {
-                    CustomMessageBox.Show("Please define a polygon.", "Error");
-                }
+                ascgridui.ShowDialog();
             }
-            
+            //if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
+            //{
+            //    using (Form ascgridui = new ASCGridUI(this))
+            //    {
+            //        MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);
+            //        ascgridui.ShowDialog();
+            //    }
+            //}
+            //else
+            //{
+            //    CustomMessageBox.Show("Please define a polygon.", "Error");
+            //}
         }
 
         public override bool Exit()
