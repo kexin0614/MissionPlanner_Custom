@@ -38,7 +38,10 @@ namespace MissionPlanner
         {
             ASCGrid.Host2 = Host;
 
-            but = new ToolStripMenuItem("ASCGrid");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ASCGridUI));
+            var temp = (string)(resources.GetObject("$this.Text"));
+
+            but = new ToolStripMenuItem(temp);
             but.Click += but_Click;
 
             bool hit = false;
@@ -63,18 +66,20 @@ namespace MissionPlanner
 
         void but_Click(object sender, EventArgs e)
         {
-            if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
+            using (var ascgridui = new ASCGridUI(this))
             {
-                using (Form ascgridui = new ASCGridUI(this))
+                MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);
+
+                if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
                 {
-                    MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);
                     ascgridui.ShowDialog();
                 }
+                else
+                {
+                    CustomMessageBox.Show("Please define a polygon.", "Error");
+                }
             }
-            else
-            {
-                CustomMessageBox.Show("Please define a polygon.", "Error");
-            }
+            
         }
 
         public override bool Exit()
