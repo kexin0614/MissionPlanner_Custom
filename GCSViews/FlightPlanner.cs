@@ -6736,30 +6736,22 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             //MessageBox.Show(s);
         }
 
-        private void toolTip1_Popup(object sender, PopupEventArgs e)
-        {
+        //private void toolTip1_Popup(object sender, PopupEventArgs e)
+        //{
 
-        }
+        //}
 
-        private void MainMap_Load(object sender, EventArgs e)
-        {
 
-        }
 
-        private void comboBoxMapType_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        //private void TXT_WPRad_TextChanged(object sender, EventArgs e)
+        //{
 
-        }
+        //}
 
-        private void TXT_WPRad_TextChanged(object sender, EventArgs e)
-        {
+        //private void panelWaypoints_CloseClick(object sender, EventArgs e)
+        //{
 
-        }
-
-        private void panelWaypoints_CloseClick(object sender, EventArgs e)
-        {
-
-        }
+        //}
 
         private void myButton2_Click(object sender, EventArgs e)
         {

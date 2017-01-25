@@ -26,7 +26,7 @@ namespace MissionPlanner
             InitializeComponent();
 
             myGMAP1.MapProvider = plugin.Host.FDMapType;
-            myGMAP1.SetPositionByKeywords("Shanghai, China");
+            myGMAP1.Position = new GMap.NET.PointLatLng(31.027964, 121.439399);
         }
 
         private void ASCGridUI_Load(object sender, EventArgs e)

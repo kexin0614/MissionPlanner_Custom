@@ -45,7 +45,7 @@
             this.myGMAP1.Location = new System.Drawing.Point(0, -1);
             this.myGMAP1.MarkersEnabled = true;
             this.myGMAP1.MaxZoom = 19;
-            this.myGMAP1.MinZoom = 2;
+            this.myGMAP1.MinZoom = 0;
             this.myGMAP1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.myGMAP1.Name = "myGMAP1";
             this.myGMAP1.NegativeMode = false;
@@ -57,7 +57,7 @@
             this.myGMAP1.ShowTileGridLines = false;
             this.myGMAP1.Size = new System.Drawing.Size(636, 458);
             this.myGMAP1.TabIndex = 0;
-            this.myGMAP1.Zoom = 0D;
+            this.myGMAP1.Zoom = 16D;
             // 
             // ASCGridUI
             // 

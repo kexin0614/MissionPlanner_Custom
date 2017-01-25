@@ -38,10 +38,10 @@ namespace MissionPlanner
         {
             ASCGrid.Host2 = Host;
 
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ASCGridUI));
-            var temp = (string)(resources.GetObject("$this.Text"));
+            //System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ASCGridUI));
+            //var temp = (string)(resources.GetObject("$this.Text"));
 
-            but = new ToolStripMenuItem(temp);
+            but = new ToolStripMenuItem("ASCGrid");
             but.Click += but_Click;
 
             bool hit = false;

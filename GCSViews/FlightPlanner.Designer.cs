@@ -397,7 +397,7 @@
             // 
             resources.ApplyResources(this.TXT_WPRad, "TXT_WPRad");
             this.TXT_WPRad.Name = "TXT_WPRad";
-            this.TXT_WPRad.TextChanged += new System.EventHandler(this.TXT_WPRad_TextChanged);
+            //this.TXT_WPRad.TextChanged += new System.EventHandler(this.TXT_WPRad_TextChanged);
             this.TXT_WPRad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TXT_WPRad_KeyPress);
             this.TXT_WPRad.Leave += new System.EventHandler(this.TXT_WPRad_Leave);
             // 
@@ -585,7 +585,7 @@
             this.panelWaypoints.ToolTipTextCloseIcon = null;
             this.panelWaypoints.ToolTipTextExpandIconPanelCollapsed = null;
             this.panelWaypoints.ToolTipTextExpandIconPanelExpanded = null;
-            this.panelWaypoints.CloseClick += new System.EventHandler<System.EventArgs>(this.panelWaypoints_CloseClick);
+            //this.panelWaypoints.CloseClick += new System.EventHandler<System.EventArgs>(this.panelWaypoints_CloseClick);
             this.panelWaypoints.ExpandClick += new System.EventHandler<System.EventArgs>(this.panelWaypoints_ExpandClick);
             // 
             // splitter1
@@ -717,7 +717,6 @@
             resources.ApplyResources(this.comboBoxMapType, "comboBoxMapType");
             this.comboBoxMapType.Name = "comboBoxMapType";
             this.toolTip1.SetToolTip(this.comboBoxMapType, resources.GetString("comboBoxMapType.ToolTip"));
-            this.comboBoxMapType.SelectedIndexChanged += new System.EventHandler(this.comboBoxMapType_SelectedIndexChanged);
             // 
             // lnk_kml
             // 
@@ -806,7 +805,6 @@
             this.MainMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.MainMap.ShowTileGridLines = false;
             this.MainMap.Zoom = 0D;
-            this.MainMap.Load += new System.EventHandler(this.MainMap_Load);
             this.MainMap.Paint += new System.Windows.Forms.PaintEventHandler(this.MainMap_Paint);
             // 
             // contextMenuStrip1
@@ -1315,7 +1313,7 @@
             // 
             // toolTip1
             // 
-            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
+            //this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
             // timer1
             // 
