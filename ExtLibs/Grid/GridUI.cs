@@ -591,6 +591,8 @@ namespace MissionPlanner
             if (CMB_camera.Text != "")
                 doCalc();
 
+           //  double asca = (double) NUM_altitude.Value;
+
             // new grid system test
 
             grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double) NUM_altitude.Value),

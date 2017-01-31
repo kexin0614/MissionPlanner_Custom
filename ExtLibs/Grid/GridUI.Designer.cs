@@ -1413,7 +1413,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox CMB_startfrom;
+        private System.Windows.Forms.ComboBox CMB_startfrom; 
         private System.Windows.Forms.NumericUpDown num_overlap;
         private System.Windows.Forms.NumericUpDown num_sidelap;
         private System.Windows.Forms.Label label5;
