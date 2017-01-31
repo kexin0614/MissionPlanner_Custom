@@ -68,7 +68,7 @@
             this.Name = "ASCGridUI";
             this.Text = "ASCGridUI";
             this.Load += new System.EventHandler(this.ASCGridUI_Load);
-            this.Resize += new System.EventHandler(this.ASCGridUI_Resize);   //没有使得多边形居中
+            this.Resize += new System.EventHandler(this.ASCGridUI_Resize);  
             this.ResumeLayout(false);
 
         }
