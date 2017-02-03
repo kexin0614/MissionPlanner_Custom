@@ -88,6 +88,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                             mavlinkComboBoxRoll.Text = item.Replace("_FUNCTION", "");
                             break;
                         case "10":
+
                             CMB_shuttertype.Text = item.Replace("_FUNCTION", "");
                             break;
                         default:

@@ -12,6 +12,7 @@ using System.Reflection;
 using MissionPlanner.GCSViews;
 using MissionPlanner.Utilities;
 using MissionPlanner.Properties;
+using MissionPlanner.Controls;
 using MissionPlanner.Controls.Waypoints;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -35,7 +36,21 @@ namespace MissionPlanner
             this.plugin = plugin;
 
             InitializeComponent();
-            
+
+            ASCComboBoxShutter.Items.AddRange(Enum.GetNames(typeof(ASCChannelCameraShutter)));
+            if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
+            {
+                ASCComboBoxTilt.Items.AddRange(Enum.GetNames(typeof(Channelap)));
+                ASCComboBoxRoll.Items.AddRange(Enum.GetNames(typeof(Channelap)));
+                //mavlinkComboBoxPan.Items.AddRange(Enum.GetNames(typeof(Channelap)));
+            }
+            else
+            {
+                ASCComboBoxTilt.Items.AddRange(Enum.GetNames(typeof(Channelac)));
+                ASCComboBoxRoll.Items.AddRange(Enum.GetNames(typeof(Channelac)));
+                //mavlinkComboBoxPan.Items.AddRange(Enum.GetNames(typeof(Channelac)));
+            }
+
         }
 
         void myGMAP1_OnCurrentPositionChanged(PointLatLng point)  //现有功能是增加机场的Marker
@@ -99,6 +114,42 @@ namespace MissionPlanner
         private void ASCGridUI_Resize(object sender, EventArgs e)  
         {
             myGMAP1.ZoomAndCenterMarkers(ascroutesOverlay.Id);    //在改变窗口大小时，依旧保持zoom和中心在合适位置
+        }
+
+        private enum ASCChannelCameraShutter
+        {
+            Disable = 0,
+            RC5 = 5,
+            RC6 = 6,
+            RC7 = 7,
+            RC8 = 8,
+            RC9 = 1,
+            RC10 = 10,
+            RC11 = 11,
+            Relay = 1,
+            Transistor = 4
+        }
+        private enum Channelap
+        {
+            Disable = 0,
+            RC5 = 1,
+            RC6 = 1,
+            RC7 = 1,
+            RC8 = 1,
+            RC9 = 1,
+            RC10 = 1,
+            RC11 = 1
+        }
+        private enum Channelac
+        {
+            Disable = 0,
+            RC5 = 1,
+            RC6 = 1,
+            RC7 = 1,
+            RC8 = 1,
+            RC9 = 1,
+            RC10 = 1,
+            RC11 = 1
         }
     }
 }

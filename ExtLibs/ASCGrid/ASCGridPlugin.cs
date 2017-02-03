@@ -66,24 +66,24 @@ namespace MissionPlanner
 
         void but_Click(object sender, EventArgs e)
         {
-            using (Form ascgridui = new ASCGridUI(this))  //实例化ASCGridUI类
+            //using (Form ascgridui = new ASCGridUI(this))  //实例化ASCGridUI类
+            //{
+            //    MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);  
+            //    //应该是框的样式之类的
+            //    ascgridui.ShowDialog();//显示
+            //}
+            if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
-                MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);  
-                //应该是框的样式之类的
-                ascgridui.ShowDialog();//显示
+                using (Form ascgridui = new ASCGridUI(this))
+                {
+                    MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);
+                    ascgridui.ShowDialog();
+                }
             }
-            //if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
-            //{
-            //    using (Form ascgridui = new ASCGridUI(this))
-            //    {
-            //        MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(ascgridui);
-            //        ascgridui.ShowDialog();
-            //    }
-            //}
-            //else
-            //{
-            //    CustomMessageBox.Show("Please define a polygon.", "Error");
-            //}
+            else
+            {
+                CustomMessageBox.Show("Please define a polygon.", "Error");
+            }
         }
 
         public override bool Exit()
