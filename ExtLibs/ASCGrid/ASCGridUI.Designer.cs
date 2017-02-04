@@ -32,13 +32,14 @@
             this.ASCComboBoxShutter = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ASCComboBoxRoll = new System.Windows.Forms.ComboBox();
             this.ASCComboBoxTilt = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.ASCComboBoxRoll = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -64,10 +65,11 @@
             this.myGMAP1.PolygonsEnabled = true;
             this.myGMAP1.RetryLoadTile = 0;
             this.myGMAP1.RoutesEnabled = true;
+            this.tableLayoutPanel1.SetRowSpan(this.myGMAP1, 2);
             this.myGMAP1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Fractional;
             this.myGMAP1.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.myGMAP1.ShowTileGridLines = false;
-            this.myGMAP1.Size = new System.Drawing.Size(669, 458);
+            this.myGMAP1.Size = new System.Drawing.Size(670, 526);
             this.myGMAP1.TabIndex = 0;
             this.myGMAP1.Zoom = 16D;
             // 
@@ -99,12 +101,48 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.ASCComboBoxShutter);
-            this.groupBox1.Location = new System.Drawing.Point(678, 3);
+            this.groupBox1.Location = new System.Drawing.Point(679, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(227, 121);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "云台通道设置";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 95);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(77, 12);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "方向通道设置";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(89, 92);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 20);
+            this.comboBox1.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 69);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(77, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "横滚通道设置";
+            // 
+            // ASCComboBoxRoll
+            // 
+            this.ASCComboBoxRoll.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ASCComboBoxRoll.FormattingEnabled = true;
+            this.ASCComboBoxRoll.Location = new System.Drawing.Point(89, 66);
+            this.ASCComboBoxRoll.Name = "ASCComboBoxRoll";
+            this.ASCComboBoxRoll.Size = new System.Drawing.Size(121, 20);
+            this.ASCComboBoxRoll.TabIndex = 5;
             // 
             // ASCComboBoxTilt
             // 
@@ -124,42 +162,6 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "俯仰通道设置";
             // 
-            // ASCComboBoxRoll
-            // 
-            this.ASCComboBoxRoll.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ASCComboBoxRoll.FormattingEnabled = true;
-            this.ASCComboBoxRoll.Location = new System.Drawing.Point(89, 66);
-            this.ASCComboBoxRoll.Name = "ASCComboBoxRoll";
-            this.ASCComboBoxRoll.Size = new System.Drawing.Size(121, 20);
-            this.ASCComboBoxRoll.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 69);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 12);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "横滚通道设置";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(89, 92);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 20);
-            this.comboBox1.TabIndex = 7;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 95);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 12);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "方向通道设置";
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -170,18 +172,29 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.71428F));
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.myGMAP1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.groupBox2, 1, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(-1, -3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(910, 464);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 404F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(910, 532);
             this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(679, 131);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(228, 163);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "航线设置";
             // 
             // ASCGridUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(906, 457);
+            this.ClientSize = new System.Drawing.Size(906, 525);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ASCGridUI";
@@ -208,5 +221,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
