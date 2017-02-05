@@ -38,6 +38,7 @@
             this.ASCComboBoxTilt = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.myGMAP1 = new MissionPlanner.Controls.myGMAP();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label7 = new System.Windows.Forms.Label();
             this.NUM_angle = new System.Windows.Forms.NumericUpDown();
@@ -49,7 +50,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.NUM_altitude = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.myGMAP1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -171,6 +171,39 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 404F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(910, 532);
             this.tableLayoutPanel1.TabIndex = 4;
+            // 
+            // myGMAP1
+            // 
+            this.myGMAP1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.myGMAP1.Bearing = 0F;
+            this.myGMAP1.CanDragMap = true;
+            this.myGMAP1.EmptyTileColor = System.Drawing.Color.Navy;
+            this.myGMAP1.GrayScaleMode = false;
+            this.myGMAP1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.myGMAP1.LevelsKeepInMemmory = 5;
+            this.myGMAP1.Location = new System.Drawing.Point(3, 3);
+            this.myGMAP1.MarkersEnabled = true;
+            this.myGMAP1.MaxZoom = 19;
+            this.myGMAP1.MinZoom = 0;
+            this.myGMAP1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.myGMAP1.Name = "myGMAP1";
+            this.myGMAP1.NegativeMode = false;
+            this.myGMAP1.PolygonsEnabled = true;
+            this.myGMAP1.RetryLoadTile = 0;
+            this.myGMAP1.RoutesEnabled = true;
+            this.tableLayoutPanel1.SetRowSpan(this.myGMAP1, 2);
+            this.myGMAP1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Fractional;
+            this.myGMAP1.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.myGMAP1.ShowTileGridLines = false;
+            this.myGMAP1.Size = new System.Drawing.Size(622, 526);
+            this.myGMAP1.TabIndex = 0;
+            this.myGMAP1.Zoom = 16D;
+            this.myGMAP1.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.myGMAP1_OnMapZoomChanged);
+            this.myGMAP1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseDown);
+            this.myGMAP1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseMove);
+            this.myGMAP1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseUp);
             // 
             // groupBox2
             // 
@@ -321,39 +354,6 @@
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 3;
             this.label5.Text = "飞行高度";
-            // 
-            // myGMAP1
-            // 
-            this.myGMAP1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.myGMAP1.Bearing = 0F;
-            this.myGMAP1.CanDragMap = true;
-            this.myGMAP1.EmptyTileColor = System.Drawing.Color.Navy;
-            this.myGMAP1.GrayScaleMode = false;
-            this.myGMAP1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.myGMAP1.LevelsKeepInMemmory = 5;
-            this.myGMAP1.Location = new System.Drawing.Point(3, 3);
-            this.myGMAP1.MarkersEnabled = true;
-            this.myGMAP1.MaxZoom = 19;
-            this.myGMAP1.MinZoom = 0;
-            this.myGMAP1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.myGMAP1.Name = "myGMAP1";
-            this.myGMAP1.NegativeMode = false;
-            this.myGMAP1.PolygonsEnabled = true;
-            this.myGMAP1.RetryLoadTile = 0;
-            this.myGMAP1.RoutesEnabled = true;
-            this.tableLayoutPanel1.SetRowSpan(this.myGMAP1, 2);
-            this.myGMAP1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Fractional;
-            this.myGMAP1.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.myGMAP1.ShowTileGridLines = false;
-            this.myGMAP1.Size = new System.Drawing.Size(622, 526);
-            this.myGMAP1.TabIndex = 0;
-            this.myGMAP1.Zoom = 16D;
-            this.myGMAP1.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.myGMAP1_OnMapZoomChanged);
-            this.myGMAP1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseDown);
-            this.myGMAP1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseMove);
-            this.myGMAP1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseUp);
             // 
             // TRK_zoom
             // 
