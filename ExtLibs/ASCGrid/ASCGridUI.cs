@@ -28,8 +28,6 @@ namespace MissionPlanner
 
         static private GMapOverlay ascroutesOverlay;
 
-        // private List<PointLatLngAlt> ascgrid;
-
         //航线生成（CreateGrid）所需的参数
         private List<PointLatLngAlt> asclist = new List<PointLatLngAlt>();
         private List<PointLatLngAlt> ascgrid;
@@ -43,7 +41,7 @@ namespace MissionPlanner
 
         //与地图操作有关的临时变量
         private PointLatLng MouseDownStart = new PointLatLng();
-        private PointLatLng MouseDownEnd;
+        private PointLatLng MouseDownEnd = new PointLatLng();
         private PointLatLngAlt CurrentGMapMarkerStartPos;
         PointLatLng currentMousePosition;
         GMapMarker CurrentGMapMarker = null;
@@ -51,6 +49,7 @@ namespace MissionPlanner
         bool isMouseDown = false;
         bool isMouseDraging = false;
         static public Object thisLock = new Object();
+        GMapMarker marker;
 
 
         public ASCGridUI(ASCGridPlugin plugin)  //构造函数，主要运行的函数
@@ -77,17 +76,25 @@ namespace MissionPlanner
             points.Points.ForEach(x => { asclist.Add(x); });  //将多边形信息记录到asclist中
             points.Dispose();
 
+            myGMAP1.MapProvider = plugin.Host.FDMapType;   //选择host使用的地图提供商
+
+            ascroutesOverlay = new GMapOverlay("ascroutesOverlay");  //id为ascroutesOverlay的路径图层
+            myGMAP1.Overlays.Add(ascroutesOverlay);  //增加图层
+
+            //myGMAP1.Overlays.Add(FlightPlanner.airportsoverlay); //增加机场
+
             //更改updown框的值以前，先将响应函数去除，修改后再绑定
             NUM_angle.ValueChanged -= domainUpDown1_ValueChanged;
-            NUM_angle.Value = (decimal)((getAngleOfLongestSide(asclist) + 360) % 360);
+            NUM_angle.Value = (decimal)((Grid.getAngleOfLongestSide(asclist) + 360) % 360);
             NUM_angle.ValueChanged += domainUpDown1_ValueChanged;
 
         }
 
-        void DrawPolygon()    //绘制多边形边界和顶点
+        /// <summary>
+        /// 绘制多边形边界和顶点
+        /// </summary>
+        void DrawPolygon()
         {
-            //ascroutesOverlay.Polygons.Clear();
-            //ascroutesOverlay.Markers.Clear();
             List<PointLatLng> asclist2 = new List<PointLatLng>();
 
             asclist.ForEach(x => { asclist2.Add(x); });
@@ -131,39 +138,19 @@ namespace MissionPlanner
             return;
         }
 
-        double getAngleOfLongestSide(List<PointLatLngAlt> list)
-        {
-            if (list.Count == 0)
-                return 0;
-            double angle = 0;
-            double maxdist = 0;
-            PointLatLngAlt last = list[list.Count - 1];
-            foreach (var item in list)
-            {
-                if (item.GetDistance(last) > maxdist)
-                {
-                    angle = item.GetBearing(last);
-                    maxdist = item.GetDistance(last);
-                }
-                last = item;
-            }
-
-            return (angle + 360) % 360;
-        }
-
         #region 地图控件相关
 
-        void myGMAP1_OnCurrentPositionChanged(PointLatLng point)  //现有功能是增加机场的Marker
+        void myGMAP1_OnCurrentPositionChanged(PointLatLng point)
         {
-            FlightPlanner.airportsoverlay.Clear();
-            foreach (var item in Airports.getAirports(myGMAP1.Position))
-            {
-                FlightPlanner.airportsoverlay.Markers.Add(new GMapMarkerAirport(item)
-                {
-                    ToolTipText = item.Tag,
-                    ToolTipMode = MarkerTooltipMode.OnMouseOver
-                });
-            }
+            //FlightPlanner.airportsoverlay.Clear();
+            //foreach (var item in Airports.getAirports(myGMAP1.Position))
+            //{
+            //    FlightPlanner.airportsoverlay.Markers.Add(new GMapMarkerAirport(item)
+            //    {
+            //        ToolTipText = item.Tag,
+            //        ToolTipMode = MarkerTooltipMode.OnMouseOver
+            //    });
+            //}
         }
 
         private void myGMAP1_MouseDown(object sender, MouseEventArgs e)
@@ -284,7 +271,64 @@ namespace MissionPlanner
             }
             catch { }
         }
-        
+
+        private void myGMAP1_OnRouteEnter(GMapRoute item)
+        {
+            string dist;
+            dist = ((float)item.Distance * 1000f).ToString("0.##") + " m";
+            if (marker != null)
+            {
+                if (ascroutesOverlay.Markers.Contains(marker))
+                    ascroutesOverlay.Markers.Remove(marker);
+            }
+
+            PointLatLng point = currentMousePosition;
+
+            marker = new GMapMarkerRect(point);
+            marker.ToolTip = new GMapToolTip(marker);
+            marker.ToolTipMode = MarkerTooltipMode.Always;
+            marker.ToolTipText = "Line: " + dist;
+            ascroutesOverlay.Markers.Add(marker);
+        }
+
+        private void myGMAP1_OnRouteLeave(GMapRoute item)
+        {
+            if (marker != null)
+            {
+                try
+                {
+                    if (ascroutesOverlay.Markers.Contains(marker))
+                        ascroutesOverlay.Markers.Remove(marker);
+                }
+                catch { }
+            }
+        }
+
+        private void myGMAP1_OnMarkerEnter(GMapMarker item)
+        {
+            if (!isMouseDown)
+            {
+                if (item is GMapMarker)
+                {
+                    CurrentGMapMarker = item as GMapMarker;
+                    CurrentGMapMarkerStartPos = CurrentGMapMarker.Position;
+                }
+            }
+        }
+
+        private void myGMAP1_OnMarkerLeave(GMapMarker item)
+        {
+            if (!isMouseDown)
+            {
+                if (item is GMapMarker)
+                {
+                    // when you click the context menu this triggers and causes problems
+                    CurrentGMapMarker = null;
+                }
+
+            }
+        }
+
         #endregion
 
         #region 事件响应函数
@@ -297,6 +341,7 @@ namespace MissionPlanner
         private void domainUpDown1_ValueChanged(object sender, EventArgs e)
         {
             doCalc();
+            ascgrid = new List<PointLatLngAlt>();
             ascgrid = Grid.CreateGrid(asclist, (double)NUM_altitude.Value,
                 val_distance, val_spacing, (double)NUM_angle.Value,
                 val_overshoot1, val_overshoot2,
@@ -304,11 +349,14 @@ namespace MissionPlanner
                 val_minLaneSeparation, val_leadin, val_adjust);
 
             myGMAP1.HoldInvalidation = true;
-
+            
+            if(ascroutesOverlay != null)
+            {
                 ascroutesOverlay.Markers.Clear();
                 ascroutesOverlay.Routes.Clear();
                 ascroutesOverlay.Polygons.Clear();
-            
+            }
+
             if (ascgrid.Count == 0)
             {
                 return;
@@ -332,52 +380,53 @@ namespace MissionPlanner
                 mingroundelevation = Math.Min(mingroundelevation, currentalt);
                 maxgroundelevation = Math.Max(maxgroundelevation, currentalt);
 
-                if (item.Tag == "M")
+                try
                 {
-                    images++;
+                    if (item.Tag == "M")
+                    {
+                        images++;
+                    }
+                    else
+                    {
+                        if (item.Tag != "SM" && item.Tag != "ME")
+                            strips++;
+
+                        var marker = new GMapMarkerWP(item, a.ToString()) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver };
+                        ascroutesOverlay.Markers.Add(marker);
+
+                        segment.Add(prevpoint);
+                        segment.Add(item);
+                        prevpoint = item;
+                        a++;
+                    }
+
+                    GMapRoute seg = new GMapRoute(segment, "segment" + a.ToString());
+                    seg.Stroke = new Pen(Color.Yellow, 4);
+                    seg.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Custom;
+                    seg.IsHitTestVisible = true;
+                    routetotal = routetotal + (float)seg.Distance;
+
+                    ascroutesOverlay.Routes.Add(seg);
+                    segment.Clear();
+
                 }
-                else
-                {
-                    if (item.Tag != "SM" && item.Tag != "ME")
-                        strips++;
-
-                    var marker = new GMapMarkerWP(item, a.ToString()) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver };
-                    ascroutesOverlay.Markers.Add(marker);
-
-                    segment.Add(prevpoint);
-                    segment.Add(item);
-                    prevpoint = item;
-                    a++;
-                }
-
-                GMapRoute seg = new GMapRoute(segment, "segment" + a.ToString());
-                seg.Stroke = new Pen(Color.Yellow, 4);
-                seg.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Custom;
-                seg.IsHitTestVisible = true;
-                routetotal = routetotal + (float)seg.Distance;
-
-                ascroutesOverlay.Routes.Add(seg);
-                segment.Clear();
+                catch { }
 
             }
-            
-            myGMAP1.HoldInvalidation = false;
-            if (!isMouseDown)
-                myGMAP1.ZoomAndCenterMarkers(ascroutesOverlay.Id);
+            try
+            {
+                myGMAP1.HoldInvalidation = false;
+                if (!isMouseDown)
+                    myGMAP1.ZoomAndCenterMarkers(ascroutesOverlay.Id);
 
-            myGMAP1.Invalidate();
+                myGMAP1.Invalidate();
+            }
+            catch { }
+
         }
 
         private void ASCGridUI_Load(object sender, EventArgs e)
         {
-            myGMAP1.MapProvider = plugin.Host.FDMapType;   //选择host使用的地图提供商
-
-            ascroutesOverlay = new GMapOverlay("ascroutesOverlay");  //id为ascroutesOverlay的路径图层
-            myGMAP1.Overlays.Add(ascroutesOverlay);  //增加图层
-
-            myGMAP1.OnPositionChanged += myGMAP1_OnCurrentPositionChanged; //运行myGMAP1_OnCurrentPositionChanged函数
-            myGMAP1.Overlays.Add(FlightPlanner.airportsoverlay); //增加机场
-
             TRK_zoom.Value = (float)myGMAP1.Zoom;
 
             domainUpDown1_ValueChanged(this, null);//绘制航点
@@ -390,6 +439,7 @@ namespace MissionPlanner
 
         #endregion
 
+        #region 常数
 
         private enum ASCChannelCameraShutter
         {
@@ -427,6 +477,6 @@ namespace MissionPlanner
             RC11 = 1
         }
 
-
+        #endregion
     }
 }

@@ -200,6 +200,11 @@
             this.myGMAP1.Size = new System.Drawing.Size(622, 526);
             this.myGMAP1.TabIndex = 0;
             this.myGMAP1.Zoom = 16D;
+            this.myGMAP1.OnRouteEnter += new GMap.NET.WindowsForms.RouteEnter(this.myGMAP1_OnRouteEnter);
+            this.myGMAP1.OnRouteLeave += new GMap.NET.WindowsForms.RouteLeave(this.myGMAP1_OnRouteLeave);
+            this.myGMAP1.OnMarkerEnter += new GMap.NET.WindowsForms.MarkerEnter(this.myGMAP1_OnMarkerEnter);
+            this.myGMAP1.OnMarkerLeave += new GMap.NET.WindowsForms.MarkerLeave(this.myGMAP1_OnMarkerLeave);
+            this.myGMAP1.OnPositionChanged += new GMap.NET.PositionChanged(this.myGMAP1_OnCurrentPositionChanged);
             this.myGMAP1.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.myGMAP1_OnMapZoomChanged);
             this.myGMAP1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseDown);
             this.myGMAP1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.myGMAP1_MouseMove);
