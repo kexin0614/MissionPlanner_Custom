@@ -79,7 +79,7 @@ namespace MissionPlanner
 
             //更改updown框的值以前，先将响应函数去除，修改后再绑定
             NUM_angle.ValueChanged -= domainUpDown1_ValueChanged;
-            NUM_angle.Value = (decimal)((Grid.getAngleOfLongestSide(asclist) + 360) % 360);
+            NUM_angle.Value = (decimal)((getAngleOfLongestSide(asclist) + 360) % 360);
             NUM_angle.ValueChanged += domainUpDown1_ValueChanged;
 
         }
@@ -129,6 +129,26 @@ namespace MissionPlanner
             val_leadin = (float)param * 1.5f;
             val_adjust = param;
             return;
+        }
+
+        double getAngleOfLongestSide(List<PointLatLngAlt> list)
+        {
+            if (list.Count == 0)
+                return 0;
+            double angle = 0;
+            double maxdist = 0;
+            PointLatLngAlt last = list[list.Count - 1];
+            foreach (var item in list)
+            {
+                if (item.GetDistance(last) > maxdist)
+                {
+                    angle = item.GetBearing(last);
+                    maxdist = item.GetDistance(last);
+                }
+                last = item;
+            }
+
+            return (angle + 360) % 360;
         }
 
         #region 地图控件相关
