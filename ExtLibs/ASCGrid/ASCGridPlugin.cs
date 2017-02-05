@@ -37,7 +37,7 @@ namespace MissionPlanner
         public override bool Loaded()
         {
             ASCGrid.Host2 = Host;
-
+            Grid.Host2 = Host;
             //System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ASCGridUI));
             //var temp = (string)(resources.GetObject("$this.Text"));
 

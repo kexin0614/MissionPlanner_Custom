@@ -84,6 +84,28 @@ namespace MissionPlanner
             form.Show();
         }
 
+
+        public static double getAngleOfLongestSide(List<PointLatLngAlt> list)
+        {
+            if (list.Count == 0)
+                return 0;
+            double angle = 0;
+            double maxdist = 0;
+            PointLatLngAlt last = list[list.Count - 1];
+            foreach (var item in list)
+            {
+                if (item.GetDistance(last) > maxdist)
+                {
+                    angle = item.GetBearing(last);
+                    maxdist = item.GetDistance(last);
+                }
+                last = item;
+            }
+
+            return (angle + 360) % 360;
+        }
+
+
         public static List<PointLatLngAlt> CreateGrid(List<PointLatLngAlt> polygon, double altitude, double distance, double spacing, double angle, double overshoot1,double overshoot2, StartPosition startpos, bool shutter, float minLaneSeparation, float leadin = 0, double adjust = 0)
         {
             //DoDebug();

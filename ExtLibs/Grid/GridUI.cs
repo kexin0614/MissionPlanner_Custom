@@ -157,7 +157,7 @@ namespace MissionPlanner
             CMB_startfrom.SelectedIndex = 0;
 
             // set and angle that is good
-            NUM_angle.Value = (decimal) ((getAngleOfLongestSide(list) + 360)%360);
+            NUM_angle.Value = (decimal) ((Grid.getAngleOfLongestSide(list) + 360)%360);
             TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString();
 
             if (plugin.Host.cs.firmware == MainV2.Firmwares.ArduPlane)
@@ -940,25 +940,7 @@ namespace MissionPlanner
             return Math.Abs(answer);
         }
 
-        double getAngleOfLongestSide(List<PointLatLngAlt> list)
-        {
-            if (list.Count == 0)
-                return 0;
-            double angle = 0;
-            double maxdist = 0;
-            PointLatLngAlt last = list[list.Count - 1];
-            foreach (var item in list)
-            {
-                if (item.GetDistance(last) > maxdist)
-                {
-                    angle = item.GetBearing(last);
-                    maxdist = item.GetDistance(last);
-                }
-                last = item;
-            }
 
-            return (angle + 360) % 360;
-        }
 
         void getFOV(double flyalt, ref double fovh, ref double fovv)
         {
