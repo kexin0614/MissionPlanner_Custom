@@ -51,7 +51,7 @@ namespace MissionPlanner.GCSViews
         bool polygonpathmode;
         Hashtable param = new Hashtable();
         bool splinemode;
-        altmode currentaltmode = altmode.Relative;
+        public altmode currentaltmode = altmode.Relative;
         int MinusNumber = 0;
         PointLatLngAlt MyRectangle0;
         PointLatLngAlt MyRectangle1;

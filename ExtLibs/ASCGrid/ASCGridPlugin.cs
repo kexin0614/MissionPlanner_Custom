@@ -72,6 +72,12 @@ namespace MissionPlanner
             //    //应该是框的样式之类的
             //    ascgridui.ShowDialog();//显示
             //}
+            if (!Host.comPort.BaseStream.IsOpen)
+            {
+                CustomMessageBox.Show("请首先连接无人机。", "错误");
+                return;
+            }
+
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
                 using (Form ascgridui = new ASCGridUI(this))
@@ -82,7 +88,7 @@ namespace MissionPlanner
             }
             else
             {
-                CustomMessageBox.Show("Please define a polygon.", "Error");
+                CustomMessageBox.Show("请先在地图定义多边形。", "错误");
             }
         }
 
