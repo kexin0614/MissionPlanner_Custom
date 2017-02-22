@@ -72,11 +72,12 @@ namespace MissionPlanner
             //    //应该是框的样式之类的
             //    ascgridui.ShowDialog();//显示
             //}
-            if (!Host.comPort.BaseStream.IsOpen)
-            {
-                CustomMessageBox.Show("请首先连接无人机。", "错误");
-                return;
-            }
+
+            //if (!Host.comPort.BaseStream.IsOpen)
+            //{
+            //    CustomMessageBox.Show("请首先连接无人机。", "错误");
+            //    return;
+            //}
 
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
