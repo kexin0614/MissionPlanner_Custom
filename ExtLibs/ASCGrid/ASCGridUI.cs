@@ -19,6 +19,8 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using System.Collections;
+using MissionPlanner.Log;
+using System.IO;
 
 namespace MissionPlanner
 {
@@ -770,8 +772,25 @@ namespace MissionPlanner
             RC11 = 1
         }
 
+
         #endregion
 
+        private void myButton1_Click(object sender, EventArgs e)
+        {
+            var form = new LogDownloadMavLink();
+            form.Show();
+        }
 
+        private void BUT_browselog_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Logs|*.log;*.tlog;*.bin";
+            openFileDialog1.ShowDialog();
+
+            if (File.Exists(openFileDialog1.FileName))
+            {
+                TXT_logfile.Text = openFileDialog1.FileName;
+                TXT_jpgdir.Text = Path.GetDirectoryName(TXT_logfile.Text);
+            }
+        }
     }
 }
