@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Reflection;
+using System.Diagnostics;
 using MissionPlanner.GCSViews;
 using MissionPlanner.Utilities;
 using MissionPlanner.Properties;
@@ -21,6 +22,7 @@ using GMap.NET.WindowsForms.Markers;
 using System.Collections;
 using MissionPlanner.Log;
 using System.IO;
+using Microsoft.Win32;
 
 namespace MissionPlanner
 {
@@ -34,6 +36,7 @@ namespace MissionPlanner
         private List<PointLatLngAlt> asclist = new List<PointLatLngAlt>();
         private List<PointLatLngAlt> ascgrid;
         private List<PointLatLngAlt> ascgrid_cam=new List<PointLatLngAlt>();
+        private List<ImageInfo> imageinfo = new List<ImageInfo>();
         private double val_distance;
         private double val_spacing;
         private double val_overshoot1;
@@ -732,6 +735,125 @@ namespace MissionPlanner
             myGMAP1.ZoomAndCenterMarkers(ascroutesOverlay.Id);    //在改变窗口大小时，依旧保持zoom和中心在合适位置
         }
 
+        public void CreateXml()
+        {
+            XmlDocument ascxmldoc = new XmlDocument();
+            XmlNode ascnode = ascxmldoc.CreateXmlDeclaration("1.0", "utf-8", "");
+            ascxmldoc.AppendChild(ascnode);
+            XmlNode ascroot = ascxmldoc.CreateElement("pix4uav");
+            ascxmldoc.AppendChild(ascroot);
+
+            CreateNode(ascxmldoc, ascroot, "id", "non");
+            CreateNode(ascxmldoc, ascroot, "version", "1.1.38");
+            CreateNode(ascxmldoc, ascroot, "projectVersion", "1.1.38");
+            CreateNode(ascxmldoc, ascroot, "cameraModelVersion", "4");
+            CreateNode(ascxmldoc, ascroot, "userName", "non");
+            CreateNode(ascxmldoc, ascroot, "WKT", "Local");
+            CreateNode(ascxmldoc, ascroot, "WKTGCP", "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]");
+            CreateNode(ascxmldoc, ascroot, "WKTImages", "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.01745329251994328,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4326\"]]");
+            CreateNode(ascxmldoc, ascroot, "projectType", "aerial");
+            CreateNode(ascxmldoc, ascroot, "uploaded", "no");
+            CreateNode(ascxmldoc, ascroot, "processingType", "full");
+            CreateNode(ascxmldoc, ascroot, "processingMethod", "standard");
+            CreateNode(ascxmldoc, ascroot, "rigProcessing", "2");
+            CreateNode(ascxmldoc, ascroot, "featureScale", "1");
+            CreateNode(ascxmldoc, ascroot, "threshAdd", "20");
+            CreateNode(ascxmldoc, ascroot, "thresHom", "10");
+            CreateNode(ascxmldoc, ascroot, "gcpAccuracy", "10");
+            CreateNode(ascxmldoc, ascroot, "minImageDist", "10");
+            CreateNode(ascxmldoc, ascroot, "updateInternals", "1");
+            CreateNode(ascxmldoc, ascroot, "relationOnMatch", "false");
+            CreateNode(ascxmldoc, ascroot, "rematch", "true");
+            CreateNode(ascxmldoc, ascroot, "minOrthoZoom", "0");
+            CreateNode(ascxmldoc, ascroot, "maxOrthoZoom", "0");
+            CreateNode(ascxmldoc, ascroot, "meanResolution", "0");
+            CreateNode(ascxmldoc, ascroot, "orthoResolution", "-1");
+            CreateNode(ascxmldoc, ascroot, "imageNormalisation", "false");
+            CreateNode(ascxmldoc, ascroot, "denseSamplingDistance", "2");
+            CreateNode(ascxmldoc, ascroot, "denseSamplingScale", "1");
+            CreateNode(ascxmldoc, ascroot, "denseMinMatches", "3");
+            CreateNode(ascxmldoc, ascroot, "denseMultiScale", "Multi");
+            CreateNode(ascxmldoc, ascroot, "denseUseArea", "yes");
+            CreateNode(ascxmldoc, ascroot, "denseUseAnnotations", "yes");
+            CreateNode(ascxmldoc, ascroot, "denseUseNoiseFiltering", "yes");
+            CreateNode(ascxmldoc, ascroot, "denseUseSurfaceSmoothing", "yes");
+            CreateNode(ascxmldoc, ascroot, "denseFilterMedianRadius", "10");
+            CreateNode(ascxmldoc, ascroot, "denseFilterSmoothRadius", "10");
+            CreateNode(ascxmldoc, ascroot, "denseFilterSmoothLevel", "2");
+
+            XmlElement cameraroot = ascxmldoc.CreateElement("camera");
+            cameraroot.SetAttribute("cameraId", "EX-ZR100_6.6_4000x3000");
+            cameraroot.SetAttribute("id", "");
+            CreateNode(ascxmldoc, cameraroot, "imageWidth", "4000");
+            CreateNode(ascxmldoc, cameraroot, "imageHeight", "3000");
+            CreateNode(ascxmldoc, cameraroot, "pixelSize", "1.56318");
+            CreateNode(ascxmldoc, cameraroot, "principalPointXmm", "3.12635");
+            CreateNode(ascxmldoc, cameraroot, "principalPointYmm", "2.34476");
+            CreateNode(ascxmldoc, cameraroot, "pixelType", "3");
+            CreateNode2(ascxmldoc, cameraroot, "pixelValue", "min", "0", "max", "0");
+            CreateNode3(ascxmldoc, cameraroot, "band", "id", "1", "name", "Red", "weight", "0.2126");
+            CreateNode3(ascxmldoc, cameraroot, "band", "id", "2", "name", "Green", "weight", "0.7152");
+            CreateNode3(ascxmldoc, cameraroot, "band", "id", "3", "name", "Blue", "weight", "0.0722");
+            CreateNode(ascxmldoc, cameraroot, "cameraType", "perspective");
+            CreateNode(ascxmldoc, cameraroot, "focalLengthmm", "6.61");
+            CreateNode(ascxmldoc, cameraroot, "radialK1", "0");
+            CreateNode(ascxmldoc, cameraroot, "radialK2", "0");
+            CreateNode(ascxmldoc, cameraroot, "radialK3", "0");
+            CreateNode(ascxmldoc, cameraroot, "tangentialT1", "0");
+            CreateNode(ascxmldoc, cameraroot, "tangentialT2", "0");
+            CreateNode(ascxmldoc, cameraroot, "source", "exif");
+            CreateNode(ascxmldoc, cameraroot, "sensorWidthmm", "6.2527");
+            CreateNode(ascxmldoc, cameraroot, "index", "0");
+            CreateNode(ascxmldoc, cameraroot, "fixedBands", "false");
+
+            ascroot.AppendChild(cameraroot);
+
+            foreach (var item in imageinfo)
+            {
+                XmlElement imageroot = ascxmldoc.CreateElement("image");
+                imageroot.SetAttribute("path", item.ImagePath);
+                imageroot.SetAttribute("type", item.type);
+                imageroot.SetAttribute("enabled", item.enabled);
+
+                item.CreateImageNode2(ascxmldoc, imageroot, "camera", "id", item.cameraid, "index", item.cameraindex);
+                item.CreateImageNode1(ascxmldoc, imageroot, "exifID", "value", item.exifid);
+                item.CreateImageNode1(ascxmldoc, imageroot, "time", "value", item.time);
+                item.CreateImageNode1(ascxmldoc, imageroot, "time", "value", item.timedouble);
+                item.CreateImageNode3(ascxmldoc, imageroot, "gps", "lat", item.lat, "lng", item.lng, "alt", item.alt);
+                item.CreateImageNode3(ascxmldoc, imageroot, "xyz", "x", item.x, "y", item.y, "z", item.z);
+                item.CreateImageNode1(ascxmldoc, imageroot, "toleranceXY", "value", item.toleranceXY);
+                item.CreateImageNode1(ascxmldoc, imageroot, "toleranceZ", "value", item.toleranceZ);
+
+                ascroot.AppendChild(imageroot);
+            }
+
+            ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
+        }
+
+        private void CreateNode(XmlDocument xmldoc, XmlNode ParentNode, string name, string value)
+        {
+            XmlElement node = xmldoc.CreateElement(name);
+            node.SetAttribute("value", value);
+            ParentNode.AppendChild(node);
+        }
+
+        private void CreateNode2(XmlDocument xmldoc, XmlNode ParentNode, string nodename, string Name, string Value, string Name1, string Value1)
+        {
+            XmlElement node = xmldoc.CreateElement(nodename);
+            node.SetAttribute(Name, Value);
+            node.SetAttribute(Name1, Value1);
+            ParentNode.AppendChild(node);
+        }
+
+        private void CreateNode3(XmlDocument xmldoc, XmlNode ParentNode, string nodename, string Name, string Value, string Name1, string Value1, string Name2, string Value2)
+        {
+            XmlElement node = xmldoc.CreateElement(nodename);
+            node.SetAttribute(Name, Value);
+            node.SetAttribute(Name1, Value1);
+            node.SetAttribute(Name2, Value2);
+            ParentNode.AppendChild(node);
+        }
+
         #endregion
 
         #region 常数
@@ -789,8 +911,109 @@ namespace MissionPlanner
             if (File.Exists(openFileDialog1.FileName))
             {
                 TXT_logfile.Text = openFileDialog1.FileName;
-                TXT_jpgdir.Text = Path.GetDirectoryName(TXT_logfile.Text);
+                // TXT_jpgdir.Text = Path.GetDirectoryName(TXT_logfile.Text);
             }
+        }
+
+        private void BUT_browsedir_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog1.ShowDialog();
+            if (folderBrowserDialog1.SelectedPath != "")
+            {
+                TXT_jpgdir.Text = folderBrowserDialog1.SelectedPath;
+
+            }
+        }
+
+        private void BUT_CreateP4D_Click(object sender, EventArgs e)
+        {
+
+            CreateXml();
+
+            try
+            {
+                string strKeyName = "installDir";
+                string softPath = @"SOFTWARE\pix4d\Pix4D mapper";
+                RegistryKey regKey = Registry.CurrentUser;
+                RegistryKey regSubKey = regKey.OpenSubKey(softPath, false);
+
+                object objResult = regSubKey.GetValue(strKeyName);
+                RegistryValueKind regValueKind = regSubKey.GetValueKind(strKeyName);
+
+                if(objResult == null || objResult.ToString() == "")
+                {
+                    throw new Exception("File no exist.");
+                }
+
+                if (regValueKind == Microsoft.Win32.RegistryValueKind.String)
+                {
+                    Process p = Process.Start(objResult.ToString() + "pix4dmapper.exe");
+                }
+            }
+            catch
+            {
+                openFileDialog1.Filter = "Pix4Dmapper|pix4dmapper.exe";
+                openFileDialog1.ShowDialog();
+
+                if (File.Exists(openFileDialog1.FileName))
+                {
+                    Process p = Process.Start(openFileDialog1.FileName);
+                    // TXT_jpgdir.Text = Path.GetDirectoryName(TXT_logfile.Text);
+                }
+            }
+
+        }
+
+        private void BUT_Anal_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+
+    public class ImageInfo
+    {
+        public ImageInfo()
+        {
+            type = "group1";
+            enabled = "true";
+            cameraindex = "0";
+        }
+
+        public string ImagePath;
+        public string type;
+        public string enabled;
+        public string cameraid;
+        public string cameraindex;
+        public string exifid;
+        public string time;
+        public string timedouble;
+
+        public string lat, lng, alt;
+        public string x, y, z;
+        public string toleranceXY, toleranceZ;
+
+        public void CreateImageNode3(XmlDocument xmldoc, XmlNode ParentNode, string nodename, string Name, string Value, string Name1, string Value1, string Name2, string Value2)
+        {
+            XmlElement node = xmldoc.CreateElement(nodename);
+            node.SetAttribute(Name, Value);
+            node.SetAttribute(Name1, Value1);
+            node.SetAttribute(Name2, Value2);
+            ParentNode.AppendChild(node);
+        }
+
+        public void CreateImageNode2(XmlDocument xmldoc, XmlNode ParentNode, string nodename, string Name, string Value, string Name1, string Value1)
+        {
+            XmlElement node = xmldoc.CreateElement(nodename);
+            node.SetAttribute(Name, Value);
+            node.SetAttribute(Name1, Value1);
+            ParentNode.AppendChild(node);
+        }
+
+        public void CreateImageNode1(XmlDocument xmldoc, XmlNode ParentNode, string nodename, string Name, string Value)
+        {
+            XmlElement node = xmldoc.CreateElement(nodename);
+            node.SetAttribute(Name, Value);
+            ParentNode.AppendChild(node);
         }
     }
 }

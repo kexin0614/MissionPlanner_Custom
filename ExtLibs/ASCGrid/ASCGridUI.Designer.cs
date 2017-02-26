@@ -47,17 +47,17 @@
             this.NUM_altitude = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox_MAV = new System.Windows.Forms.GroupBox();
+            this.myButton1 = new MissionPlanner.Controls.MyButton();
             this.Button_HOME = new MissionPlanner.Controls.MyButton();
             this.WriteWP = new MissionPlanner.Controls.MyButton();
-            this.myButton1 = new MissionPlanner.Controls.MyButton();
             this.groupBox_After = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.BUT_CreateP4D = new MissionPlanner.Controls.MyButton();
+            this.BUT_Anal = new MissionPlanner.Controls.MyButton();
             this.TXT_jpgdir = new System.Windows.Forms.TextBox();
             this.TXT_logfile = new System.Windows.Forms.TextBox();
             this.BUT_browsedir = new MissionPlanner.Controls.MyButton();
             this.BUT_browselog = new MissionPlanner.Controls.MyButton();
-            this.BUT_Anal = new MissionPlanner.Controls.MyButton();
-            this.BUT_CreateP4D = new MissionPlanner.Controls.MyButton();
-            this.label3 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
@@ -363,6 +363,16 @@
             this.groupBox_MAV.TabStop = false;
             this.groupBox_MAV.Text = "任务";
             // 
+            // myButton1
+            // 
+            this.myButton1.Location = new System.Drawing.Point(170, 20);
+            this.myButton1.Name = "myButton1";
+            this.myButton1.Size = new System.Drawing.Size(70, 23);
+            this.myButton1.TabIndex = 51;
+            this.myButton1.Text = "读取日志";
+            this.myButton1.UseVisualStyleBackColor = true;
+            this.myButton1.Click += new System.EventHandler(this.myButton1_Click);
+            // 
             // Button_HOME
             // 
             this.Button_HOME.Location = new System.Drawing.Point(8, 20);
@@ -383,16 +393,6 @@
             this.WriteWP.UseVisualStyleBackColor = true;
             this.WriteWP.Click += new System.EventHandler(this.WriteWP_Click);
             // 
-            // myButton1
-            // 
-            this.myButton1.Location = new System.Drawing.Point(170, 20);
-            this.myButton1.Name = "myButton1";
-            this.myButton1.Size = new System.Drawing.Size(70, 23);
-            this.myButton1.TabIndex = 51;
-            this.myButton1.Text = "读取日志";
-            this.myButton1.UseVisualStyleBackColor = true;
-            this.myButton1.Click += new System.EventHandler(this.myButton1_Click);
-            // 
             // groupBox_After
             // 
             this.groupBox_After.Controls.Add(this.label3);
@@ -408,6 +408,36 @@
             this.groupBox_After.TabIndex = 51;
             this.groupBox_After.TabStop = false;
             this.groupBox_After.Text = "照片处理流程";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label3.Location = new System.Drawing.Point(93, 200);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.TabIndex = 67;
+            this.label3.Text = ">>>>";
+            // 
+            // BUT_CreateP4D
+            // 
+            this.BUT_CreateP4D.Location = new System.Drawing.Point(137, 176);
+            this.BUT_CreateP4D.Name = "BUT_CreateP4D";
+            this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 60);
+            this.BUT_CreateP4D.TabIndex = 9;
+            this.BUT_CreateP4D.Text = "生成工程并启动Pix4D Mapper";
+            this.BUT_CreateP4D.UseVisualStyleBackColor = true;
+            this.BUT_CreateP4D.Click += new System.EventHandler(this.BUT_CreateP4D_Click);
+            // 
+            // BUT_Anal
+            // 
+            this.BUT_Anal.Location = new System.Drawing.Point(16, 176);
+            this.BUT_Anal.Name = "BUT_Anal";
+            this.BUT_Anal.Size = new System.Drawing.Size(63, 60);
+            this.BUT_Anal.TabIndex = 8;
+            this.BUT_Anal.Text = "分析日志与照片";
+            this.BUT_Anal.UseVisualStyleBackColor = true;
+            this.BUT_Anal.Click += new System.EventHandler(this.BUT_Anal_Click);
             // 
             // TXT_jpgdir
             // 
@@ -432,6 +462,7 @@
             this.BUT_browsedir.TabIndex = 5;
             this.BUT_browsedir.Text = "选择图片文件夹位置";
             this.BUT_browsedir.UseVisualStyleBackColor = true;
+            this.BUT_browsedir.Click += new System.EventHandler(this.BUT_browsedir_Click);
             // 
             // BUT_browselog
             // 
@@ -443,34 +474,6 @@
             this.BUT_browselog.Text = "选择日志";
             this.BUT_browselog.UseVisualStyleBackColor = true;
             this.BUT_browselog.Click += new System.EventHandler(this.BUT_browselog_Click);
-            // 
-            // BUT_Anal
-            // 
-            this.BUT_Anal.Location = new System.Drawing.Point(16, 176);
-            this.BUT_Anal.Name = "BUT_Anal";
-            this.BUT_Anal.Size = new System.Drawing.Size(63, 60);
-            this.BUT_Anal.TabIndex = 8;
-            this.BUT_Anal.Text = "分析日志与照片";
-            this.BUT_Anal.UseVisualStyleBackColor = true;
-            // 
-            // BUT_CreateP4D
-            // 
-            this.BUT_CreateP4D.Location = new System.Drawing.Point(137, 176);
-            this.BUT_CreateP4D.Name = "BUT_CreateP4D";
-            this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 60);
-            this.BUT_CreateP4D.TabIndex = 9;
-            this.BUT_CreateP4D.Text = "生成工程并启动Pix4D Mapper";
-            this.BUT_CreateP4D.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label3.Location = new System.Drawing.Point(93, 200);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 12);
-            this.label3.TabIndex = 67;
-            this.label3.Text = ">>>>";
             // 
             // openFileDialog1
             // 
