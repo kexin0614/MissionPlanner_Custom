@@ -407,7 +407,7 @@
             this.groupBox_After.Size = new System.Drawing.Size(248, 249);
             this.groupBox_After.TabIndex = 51;
             this.groupBox_After.TabStop = false;
-            this.groupBox_After.Text = "照片处理流程";
+            this.groupBox_After.Text = "后期日志分析";
             // 
             // label3
             // 
@@ -425,7 +425,7 @@
             this.BUT_CreateP4D.Name = "BUT_CreateP4D";
             this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 60);
             this.BUT_CreateP4D.TabIndex = 9;
-            this.BUT_CreateP4D.Text = "生成工程并启动Pix4D Mapper";
+            this.BUT_CreateP4D.Text = "生成工程并启动GoogleEarth";
             this.BUT_CreateP4D.UseVisualStyleBackColor = true;
             this.BUT_CreateP4D.Click += new System.EventHandler(this.BUT_CreateP4D_Click);
             // 
@@ -435,7 +435,7 @@
             this.BUT_Anal.Name = "BUT_Anal";
             this.BUT_Anal.Size = new System.Drawing.Size(63, 60);
             this.BUT_Anal.TabIndex = 8;
-            this.BUT_Anal.Text = "分析日志与照片";
+            this.BUT_Anal.Text = "分析日志";
             this.BUT_Anal.UseVisualStyleBackColor = true;
             this.BUT_Anal.Click += new System.EventHandler(this.BUT_Anal_Click);
             // 

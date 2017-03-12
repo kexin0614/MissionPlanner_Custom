@@ -14,6 +14,7 @@ using MissionPlanner.GCSViews;
 using MissionPlanner.Utilities;
 using MissionPlanner.Properties;
 using MissionPlanner.Controls;
+using MissionPlanner.GeoRef;
 using MissionPlanner.Controls.Waypoints;
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -45,6 +46,7 @@ namespace MissionPlanner
         private float val_leadin;
         private double val_adjust;
         private Grid.StartPosition startpos;
+        private Dictionary<string, PictureInformation> picturesInfo=new Dictionary<string, PictureInformation>();
 
         //与地图操作有关的临时变量
         private PointLatLng MouseDownStart = new PointLatLng();
@@ -826,6 +828,25 @@ namespace MissionPlanner
 
                 ascroot.AppendChild(imageroot);
             }
+
+            //foreach (var item in picturesInfo)
+            //{
+            //    XmlElement imageroot = ascxmldoc.CreateElement("image");
+            //    imageroot.SetAttribute("path", item.Key);
+            //    imageroot.SetAttribute("type", "group1");
+            //    imageroot.SetAttribute("enabled", "true");
+
+            //    CreateNode2(ascxmldoc, imageroot, "camera", "id", "EX-ZR100_6.6_4000x3000", "index", "0");
+            //    CreateNode(ascxmldoc, imageroot, "exifID", "EX-ZR100_6.6_4000x3000");
+            //    CreateNode(ascxmldoc, imageroot, "time", item.Value.Time.ToString());
+            //    CreateNode(ascxmldoc, imageroot, "time", "value", item.timedouble);
+            //    CreateNode3(ascxmldoc, imageroot, "gps", "lat", item.Value.Lat.ToString(), "lng", item.Value.Lon.ToString(), "alt", item.Value.AltAMSL.ToString());
+            //    CreateNode3(ascxmldoc, imageroot, "xyz", "x", item.x, "y", item.y, "z", item.z);
+            //    CreateNode(ascxmldoc, imageroot, "toleranceXY", "5");
+            //    CreateNode(ascxmldoc, imageroot, "toleranceZ", "10");
+
+            //    ascroot.AppendChild(imageroot);
+            //}
 
             ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
         }
