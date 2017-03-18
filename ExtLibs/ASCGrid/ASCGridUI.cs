@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Reflection;
 using System.Diagnostics;
+using System.IO;
 using MissionPlanner.GCSViews;
 using MissionPlanner.Utilities;
 using MissionPlanner.Properties;
@@ -22,8 +23,12 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using System.Collections;
 using MissionPlanner.Log;
-using System.IO;
 using Microsoft.Win32;
+using com.drew.metadata;
+using com.drew.imaging.jpg;
+using com.drew.imaging.tiff;
+using System.Globalization;
+using log4net;
 
 namespace MissionPlanner
 {
@@ -46,7 +51,18 @@ namespace MissionPlanner
         private float val_leadin;
         private double val_adjust;
         private Grid.StartPosition startpos;
-        private Dictionary<string, PictureInformation> picturesInfo=new Dictionary<string, PictureInformation>();
+
+        private Hashtable filedatecache = new Hashtable();
+
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        private const string PHOTO_FILES_FILTER = "*.jpg;*.tif";
+
+        // 键为文件路径, 值为照片信息
+        private Dictionary<string, PictureInformation> picturesInfo;
+
+        // 键为时间（毫秒级）, 值为位置信息和高度信息
+        private Dictionary<long, VehicleLocation> vehicleLocations;
 
         //与地图操作有关的临时变量
         private PointLatLng MouseDownStart = new PointLatLng();
@@ -64,7 +80,7 @@ namespace MissionPlanner
         Locationwp home = new Locationwp();
 
 
-        public ASCGridUI(ASCGridPlugin plugin)  //构造函数，主要运行的函数
+        public ASCGridUI(ASCGridPlugin plugin)  //构造
         {
             this.plugin = plugin;
 
@@ -105,6 +121,7 @@ namespace MissionPlanner
 
         }
 
+        #region 绘制航线，生成航点
         /// <summary>
         /// 绘制多边形边界和顶点
         /// </summary>
@@ -385,6 +402,517 @@ namespace MissionPlanner
 
             MainV2.comPort.giveComport = false;
         }
+        #endregion
+
+        #region 信息获取和填入的函数们
+        public long ToMilliseconds(DateTime date)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return Convert.ToInt64((date - epoch).TotalMilliseconds);
+        }
+
+        public DateTime FromUTCTimeMilliseconds(long milliseconds)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return epoch.AddMilliseconds(milliseconds);
+        }
+
+        public DateTime GetTimeFromGps(int weeknumber, int milliseconds)
+        {
+            int LEAP_SECONDS = 17;
+
+            DateTime datum = new DateTime(1980, 1, 6, 0, 0, 0, DateTimeKind.Utc);
+            DateTime week = datum.AddDays(weeknumber * 7);
+            DateTime time = week.AddMilliseconds(milliseconds);
+
+            return time.AddSeconds(-LEAP_SECONDS);
+        }
+
+        private int compareFileByPhotoTime(string x, string y)
+        {
+            if (getPhotoTime(x) < getPhotoTime(y)) return -1;
+            if (getPhotoTime(x) > getPhotoTime(y)) return 1;
+            return 0;
+        }
+
+        private VehicleLocation LookForLocation(DateTime t, Dictionary<long, VehicleLocation> listLocations,
+            int offsettime = 2000)
+        {
+            long time = ToMilliseconds(t);
+
+            // Time at which the GPS position is actually search and found
+            long actualTime = time;
+            int millisSTEP = 1;
+
+            // 2 seconds (2000 ms) in the log as absolute maximum
+            int maxIteration = offsettime;
+
+            bool found = false;
+            int iteration = 0;
+            VehicleLocation location = null;
+
+            while (!found && iteration < maxIteration)
+            {
+                found = listLocations.ContainsKey(actualTime);
+                if (found)
+                {
+                    location = listLocations[actualTime];
+                }
+                else
+                {
+                    actualTime += millisSTEP;
+                    iteration++;
+                }
+            }
+
+            /*if (location == null)
+                TXT_outputlog.AppendText("Time not found in log: " + time  + "\n");
+            else
+                TXT_outputlog.AppendText("GPS position found " + (actualTime - time) + " ms away\n");*/
+
+            return location;
+        }
+
+        /// <summary>
+        /// 获得快门时间
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <returns></returns>
+        private DateTime getPhotoTime(string fn)
+        {
+            DateTime dtaken = DateTime.MinValue;
+
+            if (filedatecache.ContainsKey(fn))
+            {
+                return (DateTime)filedatecache[fn];
+            }
+
+            try
+            {
+                Metadata lcMetadata = null;
+                try
+                {
+                    FileInfo lcImgFile = new FileInfo(fn);
+                    // Loading all meta data
+                    if (fn.ToLower().EndsWith(".jpg"))
+                    {
+                        lcMetadata = JpegMetadataReader.ReadMetadata(lcImgFile);
+                    }
+                    else if (fn.ToLower().EndsWith(".tif"))
+                    {
+                        lcMetadata = TiffMetadataReader.ReadMetadata(lcImgFile);
+                    }
+                }
+                catch (JpegProcessingException e)
+                {
+                    log.InfoFormat(e.Message);
+                    return dtaken;
+                }
+                catch (TiffProcessingException e)
+                {
+                    log.InfoFormat(e.Message);
+                    return dtaken;
+                }
+
+                foreach (AbstractDirectory lcDirectory in lcMetadata)
+                {
+                    if (lcDirectory.ContainsTag(0x9003))
+                    {
+                        dtaken = lcDirectory.GetDate(0x9003);
+                        log.InfoFormat("does " + lcDirectory.GetTagName(0x9003) + " " + dtaken);
+
+                        filedatecache[fn] = dtaken;
+
+                        break;
+                    }
+
+                    if (lcDirectory.ContainsTag(0x9004))
+                    {
+                        dtaken = lcDirectory.GetDate(0x9004);
+                        log.InfoFormat("does " + lcDirectory.GetTagName(0x9004) + " " + dtaken);
+
+                        filedatecache[fn] = dtaken;
+
+                        break;
+                    }
+                }
+
+                ////// old method, works, just slow
+                /*
+                Image myImage = Image.FromFile(fn);
+                PropertyItem propItem = myImage.GetPropertyItem(36867); // 36867  // 306
+
+                //Convert date taken metadata to a DateTime object 
+                string sdate = Encoding.UTF8.GetString(propItem.Value).Trim();
+                string secondhalf = sdate.Substring(sdate.IndexOf(" "), (sdate.Length - sdate.IndexOf(" ")));
+                string firsthalf = sdate.Substring(0, 10);
+                firsthalf = firsthalf.Replace(":", "-");
+                sdate = firsthalf + secondhalf;
+                dtaken = DateTime.Parse(sdate);
+
+                myImage.Dispose();
+                 */
+            }
+            catch
+            {
+            }
+
+            return dtaken;
+        }
+
+        /// <summary>
+        /// 返回各个时间的位置信息
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <returns></returns>
+        private Dictionary<long, VehicleLocation> readGPSMsgInLog(string fn)
+        {
+            Dictionary<long, VehicleLocation> vehiclePositionList = new Dictionary<long, VehicleLocation>();
+
+            // Telemetry Log
+            if (fn.ToLower().EndsWith("tlog"))
+            {
+                using (MAVLinkInterface mine = new MAVLinkInterface())
+                {
+                    mine.logplaybackfile =
+                        new BinaryReader(File.Open(fn, FileMode.Open, FileAccess.Read, FileShare.Read));
+                    mine.logreadmode = true;
+
+                    CurrentState cs = new CurrentState();
+
+                    while (mine.logplaybackfile.BaseStream.Position < mine.logplaybackfile.BaseStream.Length)
+                    {
+                        MAVLink.MAVLinkMessage packet = mine.readPacket();
+
+                        cs.datetime = mine.lastlogread;
+
+                        cs.UpdateCurrentSettings(null, true, mine);
+
+                        VehicleLocation location = new VehicleLocation();
+                        location.Time = cs.datetime;
+                        location.Lat = cs.lat;
+                        location.Lon = cs.lng;
+                        location.RelAlt = cs.alt;
+                        location.AltAMSL = cs.altasl;
+
+                        location.Roll = cs.roll;
+                        location.Pitch = cs.pitch;
+                        location.Yaw = cs.yaw;
+
+                        location.SAlt = cs.sonarrange;
+
+                        vehiclePositionList[ToMilliseconds(location.Time)] = location;
+                        // 4 5 7
+                        Console.Write((mine.logplaybackfile.BaseStream.Position * 100 /
+                                       mine.logplaybackfile.BaseStream.Length) + "    \r");
+                    }
+                    mine.logplaybackfile.Close();
+                }
+            }
+            // DataFlash Log
+            else
+            {
+                using (var sr = new CollectionBuffer(File.OpenRead(fn)))
+                {
+                    // Will hold the last seen Attitude information in order to incorporate them into the GPS Info
+                    float currentYaw = 0f;
+                    float currentRoll = 0f;
+                    float currentPitch = 0f;
+                    float currentSAlt = 0f;
+                    int a = 0;
+
+                    foreach (var item in sr.GetEnumeratorType(new string[] { "GPS", "GPS2", "ATT", "CTUN", "RFND" }))
+                    {
+                        // Look for GPS Messages. However GPS Messages do not have Roll, Pitch and Yaw
+                        // So we have to look for one ATT message after having read a GPS one
+
+                        var gpstouse = "GPS";
+
+                        if (item.msgtype == gpstouse)
+                        {
+                            if (!sr.dflog.logformat.ContainsKey(gpstouse))
+                                continue;
+
+                            int latindex = sr.dflog.FindMessageOffset(gpstouse, "Lat");
+                            int lngindex = sr.dflog.FindMessageOffset(gpstouse, "Lng");
+                            int altindex = sr.dflog.FindMessageOffset(gpstouse, "Alt");
+                            int raltindex = sr.dflog.FindMessageOffset(gpstouse, "RAlt");
+                            if (raltindex == -1)
+                                raltindex = sr.dflog.FindMessageOffset(gpstouse, "RelAlt");
+
+                            VehicleLocation location = new VehicleLocation();
+
+                            try
+                            {
+                                location.Time = item.time;
+                                if (latindex != -1)
+                                    location.Lat = double.Parse(item.items[latindex], CultureInfo.InvariantCulture);
+                                if (lngindex != -1)
+                                    location.Lon = double.Parse(item.items[lngindex], CultureInfo.InvariantCulture);
+                                if (raltindex != -1)
+                                    location.RelAlt = double.Parse(item.items[raltindex], CultureInfo.InvariantCulture);
+                                if (altindex != -1)
+                                    location.AltAMSL = double.Parse(item.items[altindex], CultureInfo.InvariantCulture);
+
+                                location.Roll = currentRoll;
+                                location.Pitch = currentPitch;
+                                location.Yaw = currentYaw;
+
+                                location.SAlt = currentSAlt;
+
+                                long millis = ToMilliseconds(location.Time);
+
+                                //System.Diagnostics.Debug.WriteLine("GPS MSG - UTCMillis = " + millis  + "  GPS Week = " + getValueFromStringArray(gpsLineValues, gpsweekpos) + "  TimeMS = " + getValueFromStringArray(gpsLineValues, timepos));
+
+                                if (!vehiclePositionList.ContainsKey(millis) && (location.Time != DateTime.MinValue))
+                                    vehiclePositionList[millis] = location;
+                            }
+                            catch
+                            {
+                                Console.WriteLine("Bad " + gpstouse + " Line");
+                            }
+                        }
+                        else if (item.msgtype == "ATT")
+                        {
+                            int Rindex = sr.dflog.FindMessageOffset("ATT", "Roll");
+                            int Pindex = sr.dflog.FindMessageOffset("ATT", "Pitch");
+                            int Yindex = sr.dflog.FindMessageOffset("ATT", "Yaw");
+
+                            if (Rindex != -1)
+                                currentRoll = float.Parse(item.items[Rindex], CultureInfo.InvariantCulture);
+                            if (Pindex != -1)
+                                currentPitch = float.Parse(item.items[Pindex], CultureInfo.InvariantCulture);
+                            if (Yindex != -1)
+                                currentYaw = float.Parse(item.items[Yindex], CultureInfo.InvariantCulture);
+                        }
+                        else if (item.msgtype == "CTUN")
+                        {
+                            int SAltindex = sr.dflog.FindMessageOffset("CTUN", "SAlt");
+
+                            if (SAltindex != -1)
+                            {
+                                currentSAlt = float.Parse(item.items[SAltindex]);
+                            }
+                        }
+                        else if (item.msgtype == "RFND")
+                        {
+                            int SAltindex = sr.dflog.FindMessageOffset("RFND", "Dist1");
+
+                            if (SAltindex != -1)
+                            {
+                                currentSAlt = float.Parse(item.items[SAltindex]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return vehiclePositionList;
+        }
+
+        /// <summary>
+        /// 返回各个时间的相机信息
+        /// </summary>
+        /// <param name="fn"></param>
+        /// <returns></returns>
+        private Dictionary<long, VehicleLocation> readCAMMsgInLog(string fn)
+        {
+            Dictionary<long, VehicleLocation> list = new Dictionary<long, VehicleLocation>();
+
+            // Telemetry Log
+            if (fn.ToLower().EndsWith("tlog"))
+            {
+
+                using (MAVLinkInterface mine = new MAVLinkInterface())
+                {
+                    mine.logplaybackfile =
+                        new BinaryReader(File.Open(fn, FileMode.Open, FileAccess.Read, FileShare.Read));
+                    mine.logreadmode = true;
+
+                    CurrentState cs = new CurrentState();
+
+                    while (mine.logplaybackfile.BaseStream.Position < mine.logplaybackfile.BaseStream.Length)
+                    {
+                        MAVLink.MAVLinkMessage packet = mine.readPacket();
+
+                        cs.datetime = mine.lastlogread;
+                        cs.UpdateCurrentSettings(null, true, mine);
+
+                        if (packet.msgid == (uint)MAVLink.MAVLINK_MSG_ID.CAMERA_FEEDBACK)
+                        {
+                            var msg = (MAVLink.mavlink_camera_feedback_t)packet.data;
+
+                            VehicleLocation location = new VehicleLocation();
+                            location.Time = FromUTCTimeMilliseconds((long)(msg.time_usec / 1000));// cs.datetime;
+                            location.Lat = msg.lat;
+                            location.Lon = msg.lng;
+                            location.RelAlt = msg.alt_rel;
+                            location.AltAMSL = msg.alt_msl;
+
+                            location.Roll = msg.roll;
+                            location.Pitch = msg.pitch;
+                            location.Yaw = msg.yaw;
+
+                            location.SAlt = cs.sonarrange;
+
+                            list[ToMilliseconds(location.Time)] = location;
+
+                            Console.Write((mine.logplaybackfile.BaseStream.Position * 100 /
+                                           mine.logplaybackfile.BaseStream.Length) + "    \r");
+                        }
+                    }
+                    mine.logplaybackfile.Close();
+                }
+            }
+            // DataFlash Log
+            else
+            {
+                float currentSAlt = 0;
+                using (var sr = new CollectionBuffer(File.OpenRead(fn)))
+                {
+                    foreach (var item in sr.GetEnumeratorType(new string[] { "CAM", "RFND" }))
+                    {
+                        if (item.msgtype == "CAM")
+                        {
+                            int latindex = sr.dflog.FindMessageOffset("CAM", "Lat");
+                            int lngindex = sr.dflog.FindMessageOffset("CAM", "Lng");
+                            int altindex = sr.dflog.FindMessageOffset("CAM", "Alt");
+                            int raltindex = sr.dflog.FindMessageOffset("CAM", "RelAlt");
+
+                            int rindex = sr.dflog.FindMessageOffset("CAM", "Roll");
+                            int pindex = sr.dflog.FindMessageOffset("CAM", "Pitch");
+                            int yindex = sr.dflog.FindMessageOffset("CAM", "Yaw");
+
+                            int gtimeindex = sr.dflog.FindMessageOffset("CAM", "GPSTime");
+                            int gweekindex = sr.dflog.FindMessageOffset("CAM", "GPSWeek");
+
+                            VehicleLocation p = new VehicleLocation();
+
+                            p.Time = GetTimeFromGps(int.Parse(item.items[gweekindex], CultureInfo.InvariantCulture),
+                                int.Parse(item.items[gtimeindex], CultureInfo.InvariantCulture));
+
+                            p.Lat = double.Parse(item.items[latindex], CultureInfo.InvariantCulture);
+                            p.Lon = double.Parse(item.items[lngindex], CultureInfo.InvariantCulture);
+                            p.AltAMSL = double.Parse(item.items[altindex], CultureInfo.InvariantCulture);
+                            if (raltindex != -1)
+                                p.RelAlt = double.Parse(item.items[raltindex], CultureInfo.InvariantCulture);
+
+                            p.Pitch = float.Parse(item.items[pindex], CultureInfo.InvariantCulture);
+                            p.Roll = float.Parse(item.items[rindex], CultureInfo.InvariantCulture);
+                            p.Yaw = float.Parse(item.items[yindex], CultureInfo.InvariantCulture);
+
+                            p.SAlt = currentSAlt;
+
+                            list[ToMilliseconds(p.Time)] = p;
+                        }
+                        else if (item.msgtype == "RFND")
+                        {
+                            int SAltindex = sr.dflog.FindMessageOffset("RFND", "Dist1");
+
+                            if (SAltindex != -1)
+                            {
+                                currentSAlt = float.Parse(item.items[SAltindex]);
+                            }
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public Dictionary<string, PictureInformation> doworkGPSOFFSET(string logFile, string dirWithImages, float offset)
+        {
+            // Lets start over 
+            Dictionary<string, PictureInformation> picturesInformationTemp =
+                new Dictionary<string, PictureInformation>();
+
+            // 从日志中读取位置信息
+            if (vehicleLocations == null || vehicleLocations.Count <= 0)
+            {
+                //if (chk_cammsg.Checked)
+                //{
+                //    vehicleLocations = readCAMMsgInLog(logFile);
+                //}
+                //else
+                //{
+                //    vehicleLocations = readGPSMsgInLog(logFile);
+                //}
+                vehicleLocations = readCAMMsgInLog(logFile);
+            }
+
+            if (vehicleLocations == null)
+            {
+                MessageBox.Show("vehicleLoacations的值为null");
+                return null;
+            }
+
+            List<string> filelist = new List<string>();
+            string[] exts = PHOTO_FILES_FILTER.Split(';');
+            foreach (var ext in exts)
+            {
+                filelist.AddRange(Directory.GetFiles(dirWithImages, ext));
+            }
+
+            string[] files = filelist.ToArray();
+
+
+            // Check that we have at least one picture
+            if (files.Length <= 0)
+            {
+                MessageBox.Show("确保至少一张图像");
+                return null;
+            }
+
+            Array.Sort(files, compareFileByPhotoTime);
+
+            // 没一个文件对应一个相机信息
+            // 我们假设图片的名称按照时间先后排序
+            for (int i = 0; i < files.Length; i++)
+            {
+                string filename = files[i];
+
+                PictureInformation p = new PictureInformation();
+
+                // 填入快门时间
+                p.ShotTimeReportedByCamera = getPhotoTime(filename);
+
+                // 寻找对应的地理位置（根据快门时间）
+                DateTime correctedTime = p.ShotTimeReportedByCamera.AddSeconds(-offset);
+                VehicleLocation shotLocation = LookForLocation(correctedTime, vehicleLocations, 5000);
+
+                if (shotLocation == null)
+                {
+                    MessageBox.Show("shotLocation的值为null");
+                }
+                else
+                {
+                    p.Lat = shotLocation.Lat;
+                    p.Lon = shotLocation.Lon;
+                    p.AltAMSL = shotLocation.AltAMSL;
+
+                    p.RelAlt = shotLocation.RelAlt;
+
+                    p.Pitch = shotLocation.Pitch;
+                    p.Roll = shotLocation.Roll;
+                    p.Yaw = shotLocation.Yaw;
+
+                    p.SAlt = shotLocation.SAlt;
+
+                    p.Time = shotLocation.Time;
+
+                    p.Path = filename;
+
+
+                    picturesInformationTemp.Add(filename, p);
+
+
+                }
+            }
+
+            return picturesInformationTemp;
+        }
+
+        #endregion
 
         #region 地图控件相关
 
@@ -810,45 +1338,56 @@ namespace MissionPlanner
 
             ascroot.AppendChild(cameraroot);
 
-            foreach (var item in imageinfo)
-            {
-                XmlElement imageroot = ascxmldoc.CreateElement("image");
-                imageroot.SetAttribute("path", item.ImagePath);
-                imageroot.SetAttribute("type", item.type);
-                imageroot.SetAttribute("enabled", item.enabled);
-
-                item.CreateImageNode2(ascxmldoc, imageroot, "camera", "id", item.cameraid, "index", item.cameraindex);
-                item.CreateImageNode1(ascxmldoc, imageroot, "exifID", "value", item.exifid);
-                item.CreateImageNode1(ascxmldoc, imageroot, "time", "value", item.time);
-                item.CreateImageNode1(ascxmldoc, imageroot, "time", "value", item.timedouble);
-                item.CreateImageNode3(ascxmldoc, imageroot, "gps", "lat", item.lat, "lng", item.lng, "alt", item.alt);
-                item.CreateImageNode3(ascxmldoc, imageroot, "xyz", "x", item.x, "y", item.y, "z", item.z);
-                item.CreateImageNode1(ascxmldoc, imageroot, "toleranceXY", "value", item.toleranceXY);
-                item.CreateImageNode1(ascxmldoc, imageroot, "toleranceZ", "value", item.toleranceZ);
-
-                ascroot.AppendChild(imageroot);
-            }
-
-            //foreach (var item in picturesInfo)
+            //foreach (var item in imageinfo)
             //{
             //    XmlElement imageroot = ascxmldoc.CreateElement("image");
-            //    imageroot.SetAttribute("path", item.Key);
-            //    imageroot.SetAttribute("type", "group1");
-            //    imageroot.SetAttribute("enabled", "true");
+            //    imageroot.SetAttribute("path", item.ImagePath);
+            //    imageroot.SetAttribute("type", item.type);
+            //    imageroot.SetAttribute("enabled", item.enabled);
 
-            //    CreateNode2(ascxmldoc, imageroot, "camera", "id", "EX-ZR100_6.6_4000x3000", "index", "0");
-            //    CreateNode(ascxmldoc, imageroot, "exifID", "EX-ZR100_6.6_4000x3000");
-            //    CreateNode(ascxmldoc, imageroot, "time", item.Value.Time.ToString());
-            //    CreateNode(ascxmldoc, imageroot, "time", "value", item.timedouble);
-            //    CreateNode3(ascxmldoc, imageroot, "gps", "lat", item.Value.Lat.ToString(), "lng", item.Value.Lon.ToString(), "alt", item.Value.AltAMSL.ToString());
-            //    CreateNode3(ascxmldoc, imageroot, "xyz", "x", item.x, "y", item.y, "z", item.z);
-            //    CreateNode(ascxmldoc, imageroot, "toleranceXY", "5");
-            //    CreateNode(ascxmldoc, imageroot, "toleranceZ", "10");
+            //    item.CreateImageNode2(ascxmldoc, imageroot, "camera", "id", item.cameraid, "index", item.cameraindex);
+            //    item.CreateImageNode1(ascxmldoc, imageroot, "exifID", "value", item.exifid);
+            //    item.CreateImageNode1(ascxmldoc, imageroot, "time", "value", item.time);
+            //    item.CreateImageNode1(ascxmldoc, imageroot, "time", "value", item.timedouble);
+            //    item.CreateImageNode3(ascxmldoc, imageroot, "gps", "lat", item.lat, "lng", item.lng, "alt", item.alt);
+            //    item.CreateImageNode3(ascxmldoc, imageroot, "xyz", "x", item.x, "y", item.y, "z", item.z);
+            //    item.CreateImageNode1(ascxmldoc, imageroot, "toleranceXY", "value", item.toleranceXY);
+            //    item.CreateImageNode1(ascxmldoc, imageroot, "toleranceZ", "value", item.toleranceZ);
 
             //    ascroot.AppendChild(imageroot);
             //}
 
-            ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
+            if (picturesInfo != null)
+            {
+                foreach (var item in picturesInfo)
+                {
+                    double timedouble = item.Value.Time.Day * 863400 + item.Value.Time.Hour * 3600 + item.Value.Time.Minute * 60 + item.Value.Time.Second;
+                    XmlElement imageroot = ascxmldoc.CreateElement("image");
+                    imageroot.SetAttribute("path", item.Key);
+                    imageroot.SetAttribute("type", "group1");
+                    imageroot.SetAttribute("enabled", "true");
+
+                    CreateNode2(ascxmldoc, imageroot, "camera", "id", "EX-ZR100_6.6_4000x3000", "index", "0");
+                    CreateNode(ascxmldoc, imageroot, "exifID", "EX-ZR100_6.6_4000x3000");
+                    CreateNode(ascxmldoc, imageroot, "time", item.Value.Time.ToString());
+                    CreateNode(ascxmldoc, imageroot, "time", timedouble.ToString());
+                    CreateNode3(ascxmldoc, imageroot, "gps", "lat", item.Value.Lat.ToString(), "lng", item.Value.Lon.ToString(), "alt", item.Value.AltAMSL.ToString());
+                    CreateNode3(ascxmldoc, imageroot, "xyz", "x", item.Value.Roll.ToString(), "y", item.Value.Pitch.ToString(), "z", item.Value.Yaw.ToString());
+                    CreateNode(ascxmldoc, imageroot, "toleranceXY", "5");
+                    CreateNode(ascxmldoc, imageroot, "toleranceZ", "10");
+
+                    ascroot.AppendChild(imageroot);
+                }
+                ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
+                MessageBox.Show("成功生成工程文件");
+                return;
+            }
+            else
+            {
+                ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
+                MessageBox.Show("已生成工程文件，但未包含图像信息");
+                return;
+            }
         }
 
         private void CreateNode(XmlDocument xmldoc, XmlNode ParentNode, string name, string value)
@@ -918,6 +1457,7 @@ namespace MissionPlanner
 
         #endregion
 
+        #region 用户按钮
         private void myButton1_Click(object sender, EventArgs e)
         {
             var form = new LogDownloadMavLink();
@@ -961,7 +1501,7 @@ namespace MissionPlanner
                 object objResult = regSubKey.GetValue(strKeyName);
                 RegistryValueKind regValueKind = regSubKey.GetValueKind(strKeyName);
 
-                if(objResult == null || objResult.ToString() == "")
+                if (objResult == null || objResult.ToString() == "")
                 {
                     throw new Exception("File no exist.");
                 }
@@ -987,8 +1527,37 @@ namespace MissionPlanner
 
         private void BUT_Anal_Click(object sender, EventArgs e)
         {
+            string dirPictures = TXT_jpgdir.Text;
+            string logFilePath = TXT_logfile.Text;
 
+            if (!File.Exists(logFilePath))
+            {
+                MessageBox.Show("无效的日志路径");
+                return;
+            }
+            if (!Directory.Exists(dirPictures))
+            {
+                MessageBox.Show("无效的图像路径");
+                return;
+            }
+
+            float seconds = 0;
+
+            try
+            {
+                picturesInfo = doworkGPSOFFSET(logFilePath, dirPictures, seconds);
+                if (picturesInfo != null)
+                {
+                    MessageBox.Show("图像分析完成");
+                    return;
+                }//更改为写入XML，此处需要修改*******************************
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("图像分析失败");
+            }
         }
+        #endregion
     }
 
     public class ImageInfo
