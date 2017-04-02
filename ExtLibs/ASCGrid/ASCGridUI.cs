@@ -36,6 +36,7 @@ namespace MissionPlanner
     {
         private ASCGridPlugin plugin; //plugin可供调用主窗口的控件、数据和设置
 
+        #region 变量
         static private GMapOverlay ascroutesOverlay;
 
         //航线生成（CreateGrid）所需的参数
@@ -78,7 +79,7 @@ namespace MissionPlanner
 
         //发送航点所需要的变量
         Locationwp home = new Locationwp();
-
+        #endregion
 
         public ASCGridUI(ASCGridPlugin plugin)  //构造
         {
@@ -164,7 +165,7 @@ namespace MissionPlanner
 
             val_overshoot1 = param * 1.5;
             val_overshoot2 = param * 1.5;
-            val_minLaneSeparation = 0.0f;
+            val_minLaneSeparation =(float)NUM_minLane.Value;
             val_leadin = (float)param * 1.5f;
             val_adjust = param;
             return;
@@ -820,7 +821,7 @@ namespace MissionPlanner
             return list;
         }
 
-        public Dictionary<string, PictureInformation> doworkGPSOFFSET(string logFile, string dirWithImages, float offset)
+        public Dictionary<string, PictureInformation> doworkCAM(string logFile, string dirWithImages)
         {
             // Lets start over 
             Dictionary<string, PictureInformation> picturesInformationTemp =
@@ -846,67 +847,101 @@ namespace MissionPlanner
                 return null;
             }
 
-            List<string> filelist = new List<string>();
-            string[] exts = PHOTO_FILES_FILTER.Split(';');
-            foreach (var ext in exts)
-            {
-                filelist.AddRange(Directory.GetFiles(dirWithImages, ext));
-            }
+            //List<string> filelist = new List<string>();
+            //string[] exts = PHOTO_FILES_FILTER.Split(';');
+            //foreach (var ext in exts)
+            //{
+            //    filelist.AddRange(Directory.GetFiles(dirWithImages, ext));
+            //}
+            string[] files = Directory.GetFiles(dirWithImages, "*.jpg");
 
-            string[] files = filelist.ToArray();
+            //string[] files = filelist.ToArray();
 
 
             // Check that we have at least one picture
-            if (files.Length <= 0)
+            if (files.Length !=vehicleLocations.Count)
             {
-                MessageBox.Show("确保至少一张图像");
+                MessageBox.Show("图像数量与日志快门数量不匹配");
                 return null;
             }
 
             Array.Sort(files, compareFileByPhotoTime);
 
-            // 没一个文件对应一个相机信息
-            // 我们假设图片的名称按照时间先后排序
-            for (int i = 0; i < files.Length; i++)
+            int i = -1;
+            foreach (var currentCAM in vehicleLocations.Values)
             {
-                string filename = files[i];
-
+                i++;
                 PictureInformation p = new PictureInformation();
 
-                // 填入快门时间
-                p.ShotTimeReportedByCamera = getPhotoTime(filename);
+                p.ShotTimeReportedByCamera = getPhotoTime(files[i]);
+                DateTime dCAMMsgTime = currentCAM.Time;
 
-                // 寻找对应的地理位置（根据快门时间）
-                DateTime correctedTime = p.ShotTimeReportedByCamera.AddSeconds(-offset);
-                VehicleLocation shotLocation = LookForLocation(correctedTime, vehicleLocations, 5000);
+                p.Time = dCAMMsgTime;
 
-                if (shotLocation == null)
-                {
-                    MessageBox.Show("shotLocation的值为null");
-                }
-                else
-                {
-                    p.Lat = shotLocation.Lat;
-                    p.Lon = shotLocation.Lon;
-                    p.AltAMSL = shotLocation.AltAMSL;
+                p.Lat = currentCAM.Lat;
+                p.Lon = currentCAM.Lon;
+                p.AltAMSL = currentCAM.AltAMSL;
+                p.RelAlt = currentCAM.RelAlt;
 
-                    p.RelAlt = shotLocation.RelAlt;
+                p.Pitch = currentCAM.Pitch;
+                p.Roll = currentCAM.Roll;
+                p.Yaw = currentCAM.Yaw;
 
-                    p.Pitch = shotLocation.Pitch;
-                    p.Roll = shotLocation.Roll;
-                    p.Yaw = shotLocation.Yaw;
+                p.SAlt = currentCAM.SAlt;
 
-                    p.SAlt = shotLocation.SAlt;
+                p.Path = files[i];
 
-                    p.Time = shotLocation.Time;
+                string picturePath = files[i];
 
-                    p.Path = filename;
+                picturesInformationTemp.Add(picturePath, p);
+            }
+            //// 每一个文件对应一个相机信息
+            //// 我们假设图片的名称按照时间先后排序
+            //for (int i = 0; i < files.Length; i++)
+            //{
+            //    string filename = files[i];
+
+            //    PictureInformation p = new PictureInformation();
+
+            //    // 填入快门时间
+            //    p.ShotTimeReportedByCamera = getPhotoTime(filename);
+
+            //    // 寻找对应的地理位置（根据快门时间）
+            //    DateTime correctedTime = p.ShotTimeReportedByCamera.AddSeconds(-offset);
+            //    VehicleLocation shotLocation = LookForLocation(correctedTime, vehicleLocations, 5000);
+
+            //    if (shotLocation == null)
+            //    {    
+                                  
+            //    }
+            //    else
+            //    {
+            //        p.Lat = shotLocation.Lat;
+            //        p.Lon = shotLocation.Lon;
+            //        p.AltAMSL = shotLocation.AltAMSL;
+
+            //        p.RelAlt = shotLocation.RelAlt;
+
+            //        p.Pitch = shotLocation.Pitch;
+            //        p.Roll = shotLocation.Roll;
+            //        p.Yaw = shotLocation.Yaw;
+
+            //        p.SAlt = shotLocation.SAlt;
+
+            //        p.Time = shotLocation.Time;
+
+            //        p.Path = filename;
 
 
-                    picturesInformationTemp.Add(filename, p);
+            //        picturesInformationTemp.Add(filename, p);
 
 
-                }
+            //    }
+            //}
+
+            if(picturesInformationTemp.Count==0)
+            {
+                MessageBox.Show("picturesInformationTemp.Count==0");
             }
 
             return picturesInformationTemp;
@@ -1372,19 +1407,20 @@ namespace MissionPlanner
                     CreateNode(ascxmldoc, imageroot, "time", item.Value.Time.ToString());
                     CreateNode(ascxmldoc, imageroot, "time", timedouble.ToString());
                     CreateNode3(ascxmldoc, imageroot, "gps", "lat", item.Value.Lat.ToString(), "lng", item.Value.Lon.ToString(), "alt", item.Value.AltAMSL.ToString());
-                    CreateNode3(ascxmldoc, imageroot, "xyz", "x", item.Value.Roll.ToString(), "y", item.Value.Pitch.ToString(), "z", item.Value.Yaw.ToString());
+                    CreateNode3(ascxmldoc, imageroot, "xyz", "x", "0", "y", "0", "z", "0");
                     CreateNode(ascxmldoc, imageroot, "toleranceXY", "5");
                     CreateNode(ascxmldoc, imageroot, "toleranceZ", "10");
+                    CreateNode3(ascxmldoc, imageroot, "opk", "omega", item.Value.Roll.ToString(), "phi", item.Value.Pitch.ToString(), "kappa", item.Value.Yaw.ToString());
 
                     ascroot.AppendChild(imageroot);
                 }
-                ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
+                ascxmldoc.Save(@"f:\test.xml");
                 MessageBox.Show("成功生成工程文件");
                 return;
             }
             else
             {
-                ascxmldoc.Save(@"c:\Users\hasee\Desktop\test.xml");
+                ascxmldoc.Save(@"f:\test.xml");
                 MessageBox.Show("已生成工程文件，但未包含图像信息");
                 return;
             }
@@ -1508,7 +1544,7 @@ namespace MissionPlanner
 
                 if (regValueKind == Microsoft.Win32.RegistryValueKind.String)
                 {
-                    Process p = Process.Start(objResult.ToString() + "pix4dmapper.exe");
+                    Process p = Process.Start(objResult.ToString() + "pix4dmapper.exe", @"f:\test.xml");
                 }
             }
             catch
@@ -1545,7 +1581,7 @@ namespace MissionPlanner
 
             try
             {
-                picturesInfo = doworkGPSOFFSET(logFilePath, dirPictures, seconds);
+                picturesInfo = doworkCAM(logFilePath, dirPictures);
                 if (picturesInfo != null)
                 {
                     MessageBox.Show("图像分析完成");
@@ -1558,6 +1594,8 @@ namespace MissionPlanner
             }
         }
         #endregion
+
+
     }
 
     public class ImageInfo

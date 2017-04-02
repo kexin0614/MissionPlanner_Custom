@@ -32,6 +32,7 @@
             this.myGMAP1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.NUM_wprad = new System.Windows.Forms.NumericUpDown();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -60,6 +61,7 @@
             this.BUT_browselog = new MissionPlanner.Controls.MyButton();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.NUM_minLane = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -71,6 +73,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.NUM_altitude)).BeginInit();
             this.groupBox_MAV.SuspendLayout();
             this.groupBox_After.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUM_minLane)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -92,7 +95,7 @@
             this.tableLayoutPanel1.RowCount = 3;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 61F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 255F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 228F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(920, 532);
             this.tableLayoutPanel1.TabIndex = 4;
@@ -157,6 +160,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.NUM_minLane);
+            this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.NUM_wprad);
             this.groupBox2.Controls.Add(this.comboBox1);
@@ -173,10 +178,20 @@
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(669, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(248, 210);
+            this.groupBox2.Size = new System.Drawing.Size(248, 237);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "航线设置";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label4.Location = new System.Drawing.Point(6, 211);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 12);
+            this.label4.TabIndex = 70;
+            this.label4.Text = "航线间隔数";
             // 
             // label2
             // 
@@ -356,7 +371,7 @@
             this.groupBox_MAV.Controls.Add(this.myButton1);
             this.groupBox_MAV.Controls.Add(this.Button_HOME);
             this.groupBox_MAV.Controls.Add(this.WriteWP);
-            this.groupBox_MAV.Location = new System.Drawing.Point(669, 219);
+            this.groupBox_MAV.Location = new System.Drawing.Point(669, 246);
             this.groupBox_MAV.Name = "groupBox_MAV";
             this.groupBox_MAV.Size = new System.Drawing.Size(248, 52);
             this.groupBox_MAV.TabIndex = 50;
@@ -402,9 +417,9 @@
             this.groupBox_After.Controls.Add(this.TXT_logfile);
             this.groupBox_After.Controls.Add(this.BUT_browsedir);
             this.groupBox_After.Controls.Add(this.BUT_browselog);
-            this.groupBox_After.Location = new System.Drawing.Point(669, 280);
+            this.groupBox_After.Location = new System.Drawing.Point(669, 307);
             this.groupBox_After.Name = "groupBox_After";
-            this.groupBox_After.Size = new System.Drawing.Size(248, 249);
+            this.groupBox_After.Size = new System.Drawing.Size(248, 222);
             this.groupBox_After.TabIndex = 51;
             this.groupBox_After.TabStop = false;
             this.groupBox_After.Text = "后期日志分析";
@@ -413,7 +428,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label3.Location = new System.Drawing.Point(93, 200);
+            this.label3.Location = new System.Drawing.Point(96, 172);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 67;
@@ -421,9 +436,9 @@
             // 
             // BUT_CreateP4D
             // 
-            this.BUT_CreateP4D.Location = new System.Drawing.Point(137, 176);
+            this.BUT_CreateP4D.Location = new System.Drawing.Point(143, 148);
             this.BUT_CreateP4D.Name = "BUT_CreateP4D";
-            this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 60);
+            this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 61);
             this.BUT_CreateP4D.TabIndex = 9;
             this.BUT_CreateP4D.Text = "生成工程并启动GoogleEarth";
             this.BUT_CreateP4D.UseVisualStyleBackColor = true;
@@ -431,9 +446,9 @@
             // 
             // BUT_Anal
             // 
-            this.BUT_Anal.Location = new System.Drawing.Point(16, 176);
+            this.BUT_Anal.Location = new System.Drawing.Point(8, 148);
             this.BUT_Anal.Name = "BUT_Anal";
-            this.BUT_Anal.Size = new System.Drawing.Size(63, 60);
+            this.BUT_Anal.Size = new System.Drawing.Size(63, 61);
             this.BUT_Anal.TabIndex = 8;
             this.BUT_Anal.Text = "分析日志";
             this.BUT_Anal.UseVisualStyleBackColor = true;
@@ -441,7 +456,7 @@
             // 
             // TXT_jpgdir
             // 
-            this.TXT_jpgdir.Location = new System.Drawing.Point(8, 95);
+            this.TXT_jpgdir.Location = new System.Drawing.Point(8, 87);
             this.TXT_jpgdir.Name = "TXT_jpgdir";
             this.TXT_jpgdir.Size = new System.Drawing.Size(232, 21);
             this.TXT_jpgdir.TabIndex = 7;
@@ -456,7 +471,7 @@
             // BUT_browsedir
             // 
             this.BUT_browsedir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BUT_browsedir.Location = new System.Drawing.Point(63, 122);
+            this.BUT_browsedir.Location = new System.Drawing.Point(68, 114);
             this.BUT_browsedir.Name = "BUT_browsedir";
             this.BUT_browsedir.Size = new System.Drawing.Size(123, 28);
             this.BUT_browsedir.TabIndex = 5;
@@ -478,6 +493,14 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // NUM_minLane
+            // 
+            this.NUM_minLane.Location = new System.Drawing.Point(129, 208);
+            this.NUM_minLane.Name = "NUM_minLane";
+            this.NUM_minLane.Size = new System.Drawing.Size(81, 21);
+            this.NUM_minLane.TabIndex = 71;
+            this.NUM_minLane.ValueChanged += new System.EventHandler(this.domainUpDown1_ValueChanged);
             // 
             // ASCGridUI
             // 
@@ -504,6 +527,7 @@
             this.groupBox_MAV.ResumeLayout(false);
             this.groupBox_After.ResumeLayout(false);
             this.groupBox_After.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUM_minLane)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -542,5 +566,7 @@
         private Controls.MyButton BUT_Anal;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown NUM_minLane;
     }
 }

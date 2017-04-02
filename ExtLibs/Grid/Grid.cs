@@ -418,7 +418,11 @@ namespace MissionPlanner
                         config = -1;
                     double adjang = Adjustangle(tempclosest, closest, newend);
 
-                    utmpos adjustpnt = newpos(newend, angle - config*(adjust+adjang), 2 * leadin);
+                    double finalangle = angle - config * (adjust + adjang);
+                    finalangle = finalangle % 360;
+                    if (finalangle < 0) finalangle = finalangle + 360;
+
+                    utmpos adjustpnt = newpos(newend, finalangle, 2 * leadin);
                     adjustpnt.Tag = "E";
                     addtomap(adjustpnt, "E");
                     ans.Add(adjustpnt);
@@ -472,7 +476,12 @@ namespace MissionPlanner
                     if (TurnRight(tempclosest, closest, newend) == true)
                         config = -1;
                     double adjang = Adjustangle(tempclosest, closest, newend);
-                    utmpos adjustpnt = newpos(newend, angle + config * (adjust+adjang), -2 * leadin);
+
+                    double finalangle = angle + config * (adjust + adjang);
+                    finalangle = finalangle % 360;
+                    if (finalangle < 0) finalangle = finalangle + 360;
+
+                    utmpos adjustpnt = newpos(newend, finalangle, -2 * leadin);
                     adjustpnt.Tag = "E";
                     addtomap(adjustpnt, "E");
                     ans.Add(adjustpnt);

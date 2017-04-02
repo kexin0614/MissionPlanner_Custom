@@ -52,7 +52,13 @@ namespace SharpKml.Base
                 DateTime? date = arg as DateTime?;
                 if (date != null)
                 {
-                    return date.Value.ToString("yyyy-MM-ddTHH:mm:sszzzzzz", CultureInfo.InvariantCulture);
+                    try
+                    {
+                        return date.Value.ToString("yyyy-MM-ddTHH:mm:sszzzzzz", CultureInfo.InvariantCulture);
+                    }
+                    catch
+                    {
+                    } 
                 }
 
                 bool? boolean = arg as bool?;
