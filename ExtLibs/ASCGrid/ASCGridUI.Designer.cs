@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ASCGridUI));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.myGMAP1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
@@ -227,7 +228,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(129, 182);
+            this.comboBox1.Location = new System.Drawing.Point(129, 183);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(81, 20);
             this.comboBox1.TabIndex = 67;
@@ -247,7 +248,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label7.Location = new System.Drawing.Point(6, 130);
+            this.label7.Location = new System.Drawing.Point(6, 129);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(83, 12);
             this.label7.TabIndex = 65;
@@ -289,7 +290,7 @@
             // num_overlap
             // 
             this.num_overlap.DecimalPlaces = 1;
-            this.num_overlap.Location = new System.Drawing.Point(129, 74);
+            this.num_overlap.Location = new System.Drawing.Point(129, 75);
             this.num_overlap.Name = "num_overlap";
             this.num_overlap.Size = new System.Drawing.Size(81, 21);
             this.num_overlap.TabIndex = 62;
@@ -368,7 +369,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label5.Location = new System.Drawing.Point(6, 22);
+            this.label5.Location = new System.Drawing.Point(6, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 3;
@@ -388,6 +389,7 @@
             // 
             // myButton1
             // 
+            this.myButton1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.myButton1.Location = new System.Drawing.Point(170, 20);
             this.myButton1.Name = "myButton1";
             this.myButton1.Size = new System.Drawing.Size(70, 23);
@@ -398,6 +400,7 @@
             // 
             // Button_HOME
             // 
+            this.Button_HOME.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.Button_HOME.Location = new System.Drawing.Point(8, 20);
             this.Button_HOME.Name = "Button_HOME";
             this.Button_HOME.Size = new System.Drawing.Size(75, 23);
@@ -408,6 +411,7 @@
             // 
             // WriteWP
             // 
+            this.WriteWP.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.WriteWP.Location = new System.Drawing.Point(89, 20);
             this.WriteWP.Name = "WriteWP";
             this.WriteWP.Size = new System.Drawing.Size(75, 23);
@@ -427,7 +431,7 @@
             this.groupBox_After.Controls.Add(this.BUT_browselog);
             this.groupBox_After.Location = new System.Drawing.Point(669, 307);
             this.groupBox_After.Name = "groupBox_After";
-            this.groupBox_After.Size = new System.Drawing.Size(248, 222);
+            this.groupBox_After.Size = new System.Drawing.Size(248, 221);
             this.groupBox_After.TabIndex = 51;
             this.groupBox_After.TabStop = false;
             this.groupBox_After.Text = "后期日志分析";
@@ -445,6 +449,7 @@
             // BUT_CreateP4D
             // 
             this.BUT_CreateP4D.Enabled = false;
+            this.BUT_CreateP4D.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.BUT_CreateP4D.Location = new System.Drawing.Point(143, 148);
             this.BUT_CreateP4D.Name = "BUT_CreateP4D";
             this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 61);
@@ -456,6 +461,7 @@
             // BUT_Anal
             // 
             this.BUT_Anal.Enabled = false;
+            this.BUT_Anal.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.BUT_Anal.Location = new System.Drawing.Point(8, 148);
             this.BUT_Anal.Name = "BUT_Anal";
             this.BUT_Anal.Size = new System.Drawing.Size(63, 61);
@@ -481,8 +487,9 @@
             // BUT_browsedir
             // 
             this.BUT_browsedir.Enabled = false;
+            this.BUT_browsedir.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.BUT_browsedir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BUT_browsedir.Location = new System.Drawing.Point(68, 114);
+            this.BUT_browsedir.Location = new System.Drawing.Point(68, 113);
             this.BUT_browsedir.Name = "BUT_browsedir";
             this.BUT_browsedir.Size = new System.Drawing.Size(123, 28);
             this.BUT_browsedir.TabIndex = 5;
@@ -492,10 +499,11 @@
             // 
             // BUT_browselog
             // 
+            this.BUT_browselog.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.BUT_browselog.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BUT_browselog.Location = new System.Drawing.Point(89, 52);
+            this.BUT_browselog.Location = new System.Drawing.Point(68, 52);
             this.BUT_browselog.Name = "BUT_browselog";
-            this.BUT_browselog.Size = new System.Drawing.Size(75, 29);
+            this.BUT_browselog.Size = new System.Drawing.Size(123, 29);
             this.BUT_browselog.TabIndex = 4;
             this.BUT_browselog.Text = "选择日志";
             this.BUT_browselog.UseVisualStyleBackColor = true;
@@ -509,9 +517,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.ClientSize = new System.Drawing.Size(916, 525);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Font = new System.Drawing.Font("宋体", 9F);
+            this.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "ASCGridUI";
             this.Text = "ASCGridUI";
             this.Load += new System.EventHandler(this.ASCGridUI_Load);
