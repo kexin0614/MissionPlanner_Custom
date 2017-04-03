@@ -827,8 +827,9 @@ namespace MissionPlanner
             Dictionary<string, PictureInformation> picturesInformationTemp =
                 new Dictionary<string, PictureInformation>();
 
+            Dictionary<long, VehicleLocation> fullvehicleLocations = new Dictionary<long, VehicleLocation>();
             // 从日志中读取位置信息
-            if (vehicleLocations == null || vehicleLocations.Count <= 0)
+            if (fullvehicleLocations == null || fullvehicleLocations.Count <= 0)
             {
                 //if (chk_cammsg.Checked)
                 //{
@@ -838,7 +839,17 @@ namespace MissionPlanner
                 //{
                 //    vehicleLocations = readGPSMsgInLog(logFile);
                 //}
-                vehicleLocations = readCAMMsgInLog(logFile);
+                fullvehicleLocations = readCAMMsgInLog(logFile);
+            }
+            long[] locationkey = fullvehicleLocations.Keys.ToArray<long>();
+            vehicleLocations = fullvehicleLocations;
+
+            for (int e = 0;e<locationkey.Length;e++)
+            {
+                if (vehicleLocations[locationkey[e]].RelAlt <= 30)
+                {
+                    vehicleLocations.Remove(locationkey[e]);
+                }
             }
 
             if (vehicleLocations == null)
@@ -1509,7 +1520,9 @@ namespace MissionPlanner
             {
                 TXT_logfile.Text = openFileDialog1.FileName;
                 // TXT_jpgdir.Text = Path.GetDirectoryName(TXT_logfile.Text);
+                BUT_browsedir.Enabled = true;
             }
+            
         }
 
         private void BUT_browsedir_Click(object sender, EventArgs e)
@@ -1518,8 +1531,9 @@ namespace MissionPlanner
             if (folderBrowserDialog1.SelectedPath != "")
             {
                 TXT_jpgdir.Text = folderBrowserDialog1.SelectedPath;
-
+                BUT_Anal.Enabled = true;
             }
+            
         }
 
         private void BUT_CreateP4D_Click(object sender, EventArgs e)
@@ -1585,13 +1599,18 @@ namespace MissionPlanner
                 if (picturesInfo != null)
                 {
                     MessageBox.Show("图像分析完成");
+                    vehicleLocations.Clear();
+                    BUT_CreateP4D.Enabled = true;
                     return;
                 }//更改为写入XML，此处需要修改*******************************
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("图像分析失败");
+                vehicleLocations.Clear();
+                MessageBox.Show("图像分析失败");
+
             }
+            
         }
         #endregion
 

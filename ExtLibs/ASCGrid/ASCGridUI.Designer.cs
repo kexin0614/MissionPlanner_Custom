@@ -32,6 +32,7 @@
             this.myGMAP1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.NUM_minLane = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.NUM_wprad = new System.Windows.Forms.NumericUpDown();
@@ -61,10 +62,10 @@
             this.BUT_browselog = new MissionPlanner.Controls.MyButton();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.NUM_minLane = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUM_minLane)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_wprad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_angle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_overlap)).BeginInit();
@@ -73,7 +74,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NUM_altitude)).BeginInit();
             this.groupBox_MAV.SuspendLayout();
             this.groupBox_After.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NUM_minLane)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -182,6 +182,14 @@
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "航线设置";
+            // 
+            // NUM_minLane
+            // 
+            this.NUM_minLane.Location = new System.Drawing.Point(129, 208);
+            this.NUM_minLane.Name = "NUM_minLane";
+            this.NUM_minLane.Size = new System.Drawing.Size(81, 21);
+            this.NUM_minLane.TabIndex = 71;
+            this.NUM_minLane.ValueChanged += new System.EventHandler(this.domainUpDown1_ValueChanged);
             // 
             // label4
             // 
@@ -342,7 +350,7 @@
             0,
             0});
             this.NUM_altitude.Minimum = new decimal(new int[] {
-            1,
+            30,
             0,
             0,
             0});
@@ -436,16 +444,18 @@
             // 
             // BUT_CreateP4D
             // 
+            this.BUT_CreateP4D.Enabled = false;
             this.BUT_CreateP4D.Location = new System.Drawing.Point(143, 148);
             this.BUT_CreateP4D.Name = "BUT_CreateP4D";
             this.BUT_CreateP4D.Size = new System.Drawing.Size(99, 61);
             this.BUT_CreateP4D.TabIndex = 9;
-            this.BUT_CreateP4D.Text = "生成工程并启动GoogleEarth";
+            this.BUT_CreateP4D.Text = "生成工程并启动Pix4Dmapper";
             this.BUT_CreateP4D.UseVisualStyleBackColor = true;
             this.BUT_CreateP4D.Click += new System.EventHandler(this.BUT_CreateP4D_Click);
             // 
             // BUT_Anal
             // 
+            this.BUT_Anal.Enabled = false;
             this.BUT_Anal.Location = new System.Drawing.Point(8, 148);
             this.BUT_Anal.Name = "BUT_Anal";
             this.BUT_Anal.Size = new System.Drawing.Size(63, 61);
@@ -470,6 +480,7 @@
             // 
             // BUT_browsedir
             // 
+            this.BUT_browsedir.Enabled = false;
             this.BUT_browsedir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.BUT_browsedir.Location = new System.Drawing.Point(68, 114);
             this.BUT_browsedir.Name = "BUT_browsedir";
@@ -494,14 +505,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // NUM_minLane
-            // 
-            this.NUM_minLane.Location = new System.Drawing.Point(129, 208);
-            this.NUM_minLane.Name = "NUM_minLane";
-            this.NUM_minLane.Size = new System.Drawing.Size(81, 21);
-            this.NUM_minLane.TabIndex = 71;
-            this.NUM_minLane.ValueChanged += new System.EventHandler(this.domainUpDown1_ValueChanged);
-            // 
             // ASCGridUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -518,6 +521,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NUM_minLane)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_wprad)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_angle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_overlap)).EndInit();
@@ -527,7 +531,6 @@
             this.groupBox_MAV.ResumeLayout(false);
             this.groupBox_After.ResumeLayout(false);
             this.groupBox_After.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NUM_minLane)).EndInit();
             this.ResumeLayout(false);
 
         }
