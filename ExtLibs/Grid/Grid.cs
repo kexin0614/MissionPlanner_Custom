@@ -110,6 +110,8 @@ namespace MissionPlanner
         {
             //DoDebug();
 
+            double tolerance = 30;
+
             if (spacing < 4 && spacing != 0)
                 spacing = 4;
 
@@ -400,7 +402,7 @@ namespace MissionPlanner
                         //在这里浪费了好多时间啊mark一下
                     }
 
-                    utmpos newend = newpos(closest.p2, angle, overshoot1 + leadin);
+                    //utmpos newend = newpos(closest.p2, angle, overshoot1 + leadin);**
                     //newend.Tag = "E";
                     //addtomap(newend, "E");
                     //ans.Add(newend);
@@ -411,21 +413,36 @@ namespace MissionPlanner
                     grid.Remove(closest);
                     if (grid.Count == 0)
                         break;
-                    closest = findClosestLine(newend, grid, minLaneSeparationINMeters, angle);
+                    closest = findClosestLine(lastpnt, grid, minLaneSeparationINMeters, angle);//***
 
                     int config = 1;
-                    if (TurnRight(tempclosest, closest, newend) == true)
+                    if (TurnRight(tempclosest, closest, lastpnt) == true)//***
                         config = -1;
-                    double adjang = Adjustangle(tempclosest, closest, newend);
+                    
+                    utmpos adjustpnt0 = newpos(lastpnt, angle + config * adjust, leadin);//***
+                    utmpos adjustpnt = newpos(adjustpnt0, angle, overshoot1);//***
 
-                    double finalangle = angle - config * (adjust + adjang);
-                    finalangle = finalangle % 360;
-                    if (finalangle < 0) finalangle = finalangle + 360;
+                    linelatlng line = new linelatlng();
+                    line.p1 = lastpnt;
+                    line.p2 = closest.p2;
+                    double adjang = Adjustangle(tempclosest, line, lastpnt);
 
-                    utmpos adjustpnt = newpos(newend, finalangle, 2 * leadin);
-                    adjustpnt.Tag = "E";
-                    addtomap(adjustpnt, "E");
-                    ans.Add(adjustpnt);
+                    if (adjang >= tolerance)
+                    {
+                        adjustpnt.Tag = "E";
+                        addtomap(adjustpnt, "E");
+                        ans.Add(adjustpnt);
+                    }
+
+                    //double adjang = Adjustangle(tempclosest, closest, newend);
+                    //double finalangle = angle - config * (adjust + adjang);
+                    //finalangle = finalangle % 360;
+                    //if (finalangle < 0) finalangle = finalangle + 360;
+
+                    //utmpos adjustpnt = newpos(newend, finalangle, 2 * leadin);
+                    //adjustpnt.Tag = "E";
+                    //addtomap(adjustpnt, "E");
+                    //ans.Add(adjustpnt);
                 }
                 else
                 {
@@ -458,7 +475,7 @@ namespace MissionPlanner
                     addtomap(closest.p1, "ME");
                     ans.Add(closest.p1);
 
-                    utmpos newend = newpos(closest.p1, angle, -overshoot2 - leadin);
+                    //utmpos newend = newpos(closest.p1, angle, -overshoot2 - leadin);//***
                     //newend.Tag = "E";
                     //addtomap(newend, "E");
                     //ans.Add(newend);
@@ -470,21 +487,35 @@ namespace MissionPlanner
                     grid.Remove(closest);
                     if (grid.Count == 0)
                         break;
-                    closest = findClosestLine(newend, grid, minLaneSeparationINMeters, angle);
+                    closest = findClosestLine(lastpnt, grid, minLaneSeparationINMeters, angle);//***
 
                     int config = 1;
-                    if (TurnRight(tempclosest, closest, newend) == true)
+                    if (TurnRight(tempclosest, closest, lastpnt) == true)//***
                         config = -1;
-                    double adjang = Adjustangle(tempclosest, closest, newend);
+                    //double adjang = Adjustangle(tempclosest, closest, newend);
 
-                    double finalangle = angle + config * (adjust + adjang);
-                    finalangle = finalangle % 360;
-                    if (finalangle < 0) finalangle = finalangle + 360;
+                    //double finalangle = angle + config * (adjust + adjang);
+                    //finalangle = finalangle % 360;
+                    //if (finalangle < 0) finalangle = finalangle + 360;
 
-                    utmpos adjustpnt = newpos(newend, finalangle, -2 * leadin);
-                    adjustpnt.Tag = "E";
-                    addtomap(adjustpnt, "E");
-                    ans.Add(adjustpnt);
+                    //utmpos adjustpnt = newpos(newend, finalangle, -2 * leadin);
+                    //adjustpnt.Tag = "E";
+                    //addtomap(adjustpnt, "E");
+                    //ans.Add(adjustpnt);
+                    utmpos adjustpnt0 = newpos(lastpnt, angle + config * adjust, -leadin);
+                    utmpos adjustpnt = newpos(adjustpnt0, angle, -overshoot2);
+
+                    linelatlng line = new linelatlng();
+                    line.p1 = lastpnt;
+                    line.p2 = closest.p1;
+                    double adjang = Adjustangle(tempclosest, line, lastpnt);
+
+                    if (adjang >= tolerance)
+                    {
+                        adjustpnt.Tag = "E";
+                        addtomap(adjustpnt, "E");
+                        ans.Add(adjustpnt);
+                    }
                 }
             }
 
@@ -729,22 +760,28 @@ namespace MissionPlanner
 
         static double Adjustangle(linelatlng templine, linelatlng nextline, utmpos endpnt)
         {
-            double x1 = 0, x2 = 0, y1 = 1, y2 = 1;
+            double x1 = 0,y1 = 1;
+            double x2 = nextline.p2.x - nextline.p1.x;
+            double y2 = nextline.p2.y - nextline.p1.y;
             if (templine.p2.x == endpnt.x && templine.p2.y == endpnt.y)
             {
                 x1 = templine.p2.x - templine.p1.x;
                 y1 = templine.p2.y - templine.p1.y;
-                x2 = nextline.p1.x - templine.p2.x;
-                y2 = nextline.p1.y - templine.p2.y;
+                //x2 = nextline.p1.x - templine.p2.x;
+                //y2 = nextline.p1.y - templine.p2.y;
             }
             else if (templine.p1.x == endpnt.x && templine.p1.y == endpnt.y)
             {
                 x1 = templine.p1.x - templine.p2.x;
                 y1 = templine.p1.y - templine.p2.y;
-                x2 = nextline.p1.x - templine.p1.x;
-                y2 = nextline.p1.y - templine.p1.y;
+                //x2 = nextline.p1.x - templine.p1.x;
+                //y2 = nextline.p1.y - templine.p1.y;
             }
-            double adjustang = Math.Acos((x1 * x2 + y1 * y2) / Math.Sqrt((x1*x1+y1*y1)*(x2*x2+y2*y2)));
+            //double adjustang = Math.Acos((x1 * x2 + y1 * y2) / Math.Sqrt((x1*x1+y1*y1)*(x2*x2+y2*y2)));
+            //return adjustang;
+            double value = (x1 * x2 + y1 * y2) / Math.Sqrt((x1 * x1 + y1 * y1) * (x2 * x2 + y2 * y2));
+            double adjustang0 = Math.Acos(value);
+            double adjustang = adjustang0 * rad2deg;
             return adjustang;
         }
     }
